@@ -2,22 +2,24 @@ import QtQuick
 // qmllint disable import
 import "root:/services/"
 
-Column {
+Row {
+    spacing: 5
     Text {
         id: clockIcon
         font.family: "Material Symbols Rounded"
         font.pixelSize: 24
-        textFormat: Text.StyledText
+        color: "white"
         text: "calendar_month"
         anchors.verticalCenter: parent.verticalCenter
     }
     Text {
         // qmllint disable unqualified
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.left: clockIcon.right
-        anchors.leftMargin: 2
+        id: clockText
+        anchors.bottom: clockIcon.bottom
+        anchors.bottomMargin: 4
         text: Time.time
-        font.pixelSize: 18
+        font.pixelSize: 16
         font.family: "CaskaydiaCove Nerd Font"
+        color: "white"
     }
 }
