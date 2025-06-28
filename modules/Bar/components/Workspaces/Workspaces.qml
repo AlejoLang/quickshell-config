@@ -1,6 +1,6 @@
 import QtQuick
 import QtQuick.Layouts
-import Quickshell.Hyprland
+import "root:/services/"
 
 RowLayout {
     spacing: 5
@@ -11,6 +11,7 @@ RowLayout {
             anchors.verticalCenter: parent.verticalCenter
             font.pixelSize: 20
             font.family: "Material Symbols Rounded"
+            color: "white"
             Layout.fillWidth: true
             MouseArea {
                 anchors.fill: parent
