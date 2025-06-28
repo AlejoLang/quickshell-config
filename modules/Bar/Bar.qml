@@ -1,33 +1,31 @@
-import Quickshell
 import QtQuick 
 import "components/Clock"
 import "components/LauncherIcon"
 import "components/Workspaces"
+import "components/CurrentWindow"
 
-Rectangle {
+Row {
     anchors.left: parent.left
     anchors.right: parent.right
+    anchors.top: parent.top
     anchors.verticalCenter: parent.verticalCenter
-    anchors.margins: 5
-    color: "red"
-    height: 40
-    radius: 5
+    anchors.margins: 10
+    width: parent.implicitWidth
+    spacing: 10
     LauncherIcon {
         id: launcherIcon
         anchors.verticalCenter: parent.verticalCenter
-        anchors.left: parent.left
-        anchors.leftMargin: 5
     }
     Workspaces {
         id: workspacesWidget
-        anchors.left: launcherIcon.right
         anchors.verticalCenter: parent.verticalCenter
-        anchors.leftMargin: 10
     }
-    Clock {
-        anchors.left: workspacesWidget.right
+    CurrentWindow {
         anchors.verticalCenter: parent.verticalCenter
-        anchors.leftMargin: 10
+        id: currentWindowWidget
+    } 
+    Clock {
+        anchors.verticalCenter: parent.verticalCenter
         id: clockWidget
     }
 }
