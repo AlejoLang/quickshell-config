@@ -25,7 +25,7 @@ Singleton {
     }
 
     function updateActiveNetwork() {
-        activeNetwork = root.networksList.find(n => n.connected) || null;
+        activeNetwork = root.networksList?.find(n => n.connected) || null;
     }
 
     function update() {
@@ -64,6 +64,10 @@ Singleton {
         } else {
             console.warn("No active network to disconnect from.");
         }
+    }
+
+    Component.onCompleted: {
+        root.update();
     }
 
     Timer {
