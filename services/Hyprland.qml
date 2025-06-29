@@ -39,7 +39,7 @@ Singleton {
             else if (event.name.includes("workspace"))
                 Hyprland.refreshWorkspaces();
             else
-                getClients();
+                root.getClients();
         }
     }
 
