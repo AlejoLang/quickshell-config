@@ -123,6 +123,24 @@ Singleton {
     }
 
     Process {
+        id: initialBluetoothPoweredStatusProcess;
+        running: true;
+        command: ["bluetoothctl", "show"];
+        stdout: StdioCollector {
+            onStreamFinished: {
+                const textLower = text.toLowerCase();
+                if(textLower.includes("powered: yes")) {
+                    root.powered = true;
+                } else if(textLower.includes("powered: no")) {
+                    root.powered = false;
+                } else {
+                    console.warn("Failed to determine initial Bluetooth power status:", text); 
+                }
+            }
+        }
+    }    
+
+    Process {
         id: switchBluetoothPowerProcess;
         property bool status: false; // true for on, false for off
         running: false;
