@@ -1,6 +1,6 @@
 # Quickshell config
-My config for the (https://quickshell.outfoxxed.me/)[Quickshell toolkit], taking code inspiration from (https://github.com/caelestia-dots/shell/tree/main)[soramane config].
-Made for (https://hypr.land/)[Hyprland].
+My config for the [Quickshell toolkit](https://quickshell.outfoxxed.me/), taking code inspiration from [soramane config](https://github.com/caelestia-dots/shell/tree/main).
+Made for [Hyprland](https://hypr.land/).
 
 ## "Special" packages used
 - Material Symbols Font
