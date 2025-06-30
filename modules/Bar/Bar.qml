@@ -3,6 +3,8 @@ import "components/Clock"
 import "components/LauncherIcon"
 import "components/Workspaces"
 import "components/CurrentWindow"
+import "components/Network"
+import "components/Bluetooth"   
 
 Row {
     anchors.left: parent.left
@@ -27,5 +29,13 @@ Row {
     Clock {
         anchors.verticalCenter: parent.verticalCenter
         id: clockWidget
+    }
+    NetworkItem {
+        anchors.verticalCenter: parent.verticalCenter
+        id: networkWidget
+    }
+    Bluetooth {
+        anchors.verticalCenter: parent.verticalCenter
+        id: bluetoothWidget
     }
 }
