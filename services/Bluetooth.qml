@@ -118,9 +118,15 @@ Singleton {
         untrustDeviceProcess.running = true;
     }
 
-    Component.onCompleted: {
-        getDevicesProcess.running = true;
-    }
+    Timer {
+        interval: 1
+        repeat: false
+        running: true
+        onTriggered: {
+            initialBluetoothPoweredStatusProcess.running = true;
+            getDevicesProcess.running = true
+        }
+    } 
 
     Process {
         id: initialBluetoothPoweredStatusProcess;

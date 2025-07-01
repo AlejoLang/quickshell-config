@@ -66,12 +66,8 @@ Singleton {
         }
     }
 
-    Component.onCompleted: {
-        root.update();
-    }
-
     Timer {
-        interval: 5000
+        interval: 1
         repeat: true
         running: true
         onTriggered: root.update()
