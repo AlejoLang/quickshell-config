@@ -1,8 +1,7 @@
 import QtQuick
-import QtQuick.Layouts
 import "root:/services/"
 
-RowLayout {
+Row {
     spacing: 5
     Repeater {
         model: Hyprland.workspaces // Directly use the workspaces model
@@ -12,11 +11,12 @@ RowLayout {
             font.pixelSize: 20
             font.family: "Material Symbols Rounded"
             color: "white"
-            Layout.fillWidth: true
             MouseArea {
+                propagateComposedEvents: true
                 anchors.fill: parent
-                onClicked: {
+                onClicked: (event) => {
                     modelData.activate()    
+                    event.accepted = false
                 }
             }
         } 

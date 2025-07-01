@@ -9,10 +9,12 @@ Text {
     text: "apps"
     anchors.verticalCenter: parent.verticalCenter
     MouseArea {
+        propagateComposedEvents: true
         anchors.fill: parent
-        onClicked: {
+        onClicked: (event) => {
             // send message to console
             console.log("Click!")
+            event.accepted = false
         }
     }  
 }
