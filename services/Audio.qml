@@ -80,7 +80,14 @@ Singleton {
         running: true
         onTriggered: root.setup()
     }
-    
+
+    Timer {
+        interval: 1000 // Refresh every second
+        repeat: true
+        running: true
+        onTriggered: root.setup()
+    }
+
     Process {
         id: switchAudioSinkProcess
         property int nodeId: 0 // Default to first sink
