@@ -68,6 +68,13 @@ Singleton {
 
     Timer {
         interval: 1
+        repeat: false
+        running: true
+        onTriggered: root.update()
+    }
+
+    Timer {
+        interval: 5000 // Refresh every second
         repeat: true
         running: true
         onTriggered: root.update()
