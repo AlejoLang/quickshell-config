@@ -1,7 +1,7 @@
 import QtQuick
 
 Rectangle {
-    property real progress: 0.0
+    property real progress
 
     function getProgress() {
         return progress;
@@ -11,15 +11,15 @@ Rectangle {
         anchors.left: parent.left
         anchors.top: parent.top
         anchors.bottom: parent.bottom
-        width: parent.width * parent.progress
-        color: "#00FF00"
+        width: parent.width * (parent.progress || 0)
+        color: "#EFEFEF"
     }
     Rectangle {
         anchors.right: parent.right
         anchors.top: parent.top
         anchors.bottom: parent.bottom
-        width: parent.width * (1 - parent.progress)
-        color: "#FF0000"
+        width: parent.width * (1 - (parent.progress || 0))
+        color: "#131313"
     }
 
     MouseArea {
