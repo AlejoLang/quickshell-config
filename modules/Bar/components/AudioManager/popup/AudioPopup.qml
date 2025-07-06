@@ -8,7 +8,7 @@ PopupWindow {
     anchor.rect.x: audioWidget.x + (audioWidget.width / 2) - (root.implicitWidth / 2)
     anchor.rect.y: panelWindow.implicitHeight + 10
     implicitWidth: 500
-    implicitHeight: 150
+    implicitHeight: 160
     visible: false
     color: "transparent"
     Rectangle {
@@ -19,7 +19,7 @@ PopupWindow {
         border.width: 3
         Column {
             width: parent.width
-            spacing: 10
+            spacing: 0
             NodeEntry {
                 id: currentSinkEntry
                 node: Audio.currentSink

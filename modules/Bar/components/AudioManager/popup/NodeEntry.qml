@@ -7,6 +7,7 @@ Column {
     required property var node
     width: parent.width
     padding: 10
+    spacing: 5
     Row {
         spacing: 10
         Text {
@@ -33,12 +34,25 @@ Column {
             anchors.verticalCenter: parent.verticalCenter
         }
     }
-    Slide {
-        id: volumeSlider
-        height: 10
-        width: parent.width - 100
-        onProgressChanged: {
-            Audio.setNodeVolume(root.node.id, volumeSlider.progress);
+    Row {
+        spacing: 10
+        width: parent.width
+        Slide {
+            id: volumeSlider
+            anchors.verticalCenter: parent.verticalCenter
+            progress: root.node.audio ? root.node.audio.volume : 0
+            height: 10
+            width: parent.width - 100
+            onProgressChanged: {
+                Audio.setNodeVolume(root.node.id, volumeSlider.progress);
+            }
+        } 
+        Text {
+            text: (root.node.audio ? (root.node.audio.volume * 100).toFixed(0) : "0") + "%"
+            font.pixelSize: 16
+            color: "white"
+            anchors.verticalCenter: parent.verticalCenter
         }
-    } 
+    }
+    
 } 
