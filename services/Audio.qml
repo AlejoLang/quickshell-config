@@ -9,25 +9,22 @@ import Quickshell.Services.Pipewire
 
 Singleton {
     id: root
-    property list<PwNode> sourcesList;
-    property list<PwNode> sinksList;
+    property list<PwNode> sinksList: [];
+    property list<PwNode> sourcesList: [];
     property PwNode currentSource: Pipewire.defaultAudioSource ?? null;
     property PwNode currentSink: Pipewire.defaultAudioSink ?? null;
 
     function setup () {
-       const sinks = [];
-        const sources = []
-        for (const node of Pipewire.nodes.values) {
-            if(PwNodeType.toString(node.type) === "AudioSink") {
-                sinks.push(node);
-                tracker.objects.push(node);
-            } else if(PwNodeType.toString(node.type) === "AudioSource") {
-                sources.push(node);
+        const sinks = Pipewire.nodes.values.filter(node => (!node.isStream && node.isSink && node.audio));
+        const sources = Pipewire.nodes.values.filter(node => (!node.isStream && !node.isSink && node.audio));
+        root.sinksList = sinks 
+        root.sourcesList = sources
+        const aux = [...sinks, ...sources];
+        for (const node of aux) {
+            if(!tracker.objects.find(n => n.id === node.id)) {
                 tracker.objects.push(node);
             }
         }
-        root.sourcesList = sources;
-        root.sinksList = sinks; 
     }
 
     function setNodeVolume(nodeId: int, volume: real) {
@@ -103,6 +100,6 @@ Singleton {
 
     PwObjectTracker {
         id: tracker
-        objects: []
+        objects: [Pipewire.defaultAudioSink, Pipewire.defaultAudioSource]
     }
 }
