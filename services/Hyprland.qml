@@ -11,7 +11,7 @@ Singleton {
     // readonly property var toplevels: Hyprland.toplevels
     readonly property var workspaces: Hyprland.workspaces
     readonly property var monitors: Hyprland.monitors
-    // readonly property HyprlandToplevel activeToplevel: Hyprland.activeToplevel
+    readonly property HyprlandToplevel activeToplevel: Hyprland.activeToplevel
     readonly property HyprlandWorkspace focusedWorkspace: Hyprland.focusedWorkspace
     readonly property HyprlandMonitor focusedMonitor: Hyprland.focusedMonitor
     readonly property int activeWsId: focusedWorkspace?.id ?? 1
@@ -27,6 +27,17 @@ Singleton {
         activeClientProcess.running = true;
     }
 
+    Timer {
+        interval: 1
+        repeat: false
+        running: true
+        onTriggered: {
+            Hyprland.refreshMonitors();
+            Hyprland.refreshWorkspaces();
+            Hyprland.refreshToplevels();
+        }
+    }
+
     Connections {
         target: Hyprland
 
@@ -38,8 +49,10 @@ Singleton {
                 Hyprland.refreshMonitors();
             else if (event.name.includes("workspace"))
                 Hyprland.refreshWorkspaces();
-            else
+            else {
+                Hyprland.refreshToplevels();
                 root.getClients();
+            }
         }
     }
 
