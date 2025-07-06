@@ -3,5 +3,7 @@ import QtQuick
 import "modules/Drawers/"
 // qmllint disable unqualified
 ShellRoot {
-    Drawers {}
+    Drawers {
+        id: drawer
+    }
 }

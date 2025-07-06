@@ -16,7 +16,7 @@ Row {
 
     Text {
         id: windowName
-        text: Hyprland.activeClient ? Hyprland.activeClient.name : "Background"
+        text: Hyprland.activeClient ? Hyprland.activeToplevel.lastIpcObject.initialTitle : "Background"
         anchors.verticalCenter: parent.verticalCenter
         font.pixelSize: 16
         font.family: "CaskaydiaCove Nerd Font"
