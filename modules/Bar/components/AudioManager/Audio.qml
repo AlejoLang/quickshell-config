@@ -1,21 +1,26 @@
 import QtQuick
 import "root:/services/"
-import "./"
+import "./popup"
 
 Row {
     spacing: 5
     width: 30
     id: root
     Text {
-        text: Audio.currentSink ? Audio.currentSink.audio.volume.toFixed(2) * 100 : "No Audio Sink"
+        text: Audio.currentSink ? (Audio.currentSink.audio.volume.toFixed(2) * 100).toFixed(0) : "No Audio Sink"
+        color: "white"
+        font.pixelSize: 16
         MouseArea {
             anchors.fill: parent
             onClicked:{
                 if (audioPopout.visible) {
                     audioPopout.visible = false;
+                    focusGrab.active = false;
+                    panelWindow.openedPopup = null; 
                 } else {
                     audioPopout.visible = true;
                     panelWindow.openedPopup = audioPopout;
+                    focusGrab.active = true; // Disable focus grab to allow interaction with the popup
                 }
             }
             onWheel: function(event) {
