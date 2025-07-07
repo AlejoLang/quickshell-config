@@ -6,6 +6,7 @@ import "components/CurrentWindow"
 import "components/Network"
 import "components/Bluetooth"   
 import "components/AudioManager"
+import "components/Battery"
 
 Row {
     anchors.left: parent.left
@@ -42,5 +43,9 @@ Row {
     Audio {
         anchors.verticalCenter: parent.verticalCenter
         id: audioWidget
+    }
+    Battery {
+        anchors.verticalCenter: parent.verticalCenter
+        id: batteryWidget
     }
 }
