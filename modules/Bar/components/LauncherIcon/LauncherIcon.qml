@@ -3,7 +3,7 @@ import QtQuick
 Text {
     id: launcherIcon
     font.family: "Material Symbols Rounded"
-    color: "white"
+    color: "#252525"
     font.pixelSize: 28
     textFormat: Text.StyledText
     text: "apps"

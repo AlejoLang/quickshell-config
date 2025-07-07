@@ -4,22 +4,22 @@ import "root:/services/"
 
 Row {
     spacing: 5
+    rightPadding: 4 // Adjust because on the other end there is an icon
     Text {
         id: clockIcon
         font.family: "Material Symbols Rounded"
         font.pixelSize: 24
-        color: "white"
+        color: "#252525"
         text: "calendar_month"
         anchors.verticalCenter: parent.verticalCenter
     }
     Text {
-        // qmllint disable unqualified
         id: clockText
-        anchors.bottom: clockIcon.bottom
-        anchors.bottomMargin: 4
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.verticalCenterOffset: 0.5 
         text: Time.time
         font.pixelSize: 16
         font.family: "CaskaydiaCove Nerd Font"
-        color: "white"
+        color: "#252525"
     }
 }

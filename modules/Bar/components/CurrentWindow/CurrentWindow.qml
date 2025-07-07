@@ -18,8 +18,9 @@ Row {
         id: windowName
         text: Hyprland.activeClient ? Hyprland.activeToplevel.lastIpcObject.initialTitle : "Background"
         anchors.verticalCenter: parent.verticalCenter
+        anchors.verticalCenterOffset: 0.5
         font.pixelSize: 16
         font.family: "CaskaydiaCove Nerd Font"
-        color: "white"
+        color: "#252525"
     }
 }

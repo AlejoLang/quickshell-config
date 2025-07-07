@@ -6,7 +6,7 @@ Row {
         id: bluetoothIcon
         font.family: "Material Symbols Rounded"
         font.pixelSize: 24
-        color: "white"
+        color: "#252525"
         text: Bluetooth.powered ? (Bluetooth.connected ? "bluetooth_connected" : "bluetooth") : "bluetooth_disabled"
     }
 }

@@ -10,7 +10,7 @@ Row {
             anchors.verticalCenter: parent.verticalCenter
             font.pixelSize: 20
             font.family: "Material Symbols Rounded"
-            color: "white"
+            color: "#252525"
             MouseArea {
                 propagateComposedEvents: true
                 anchors.fill: parent
