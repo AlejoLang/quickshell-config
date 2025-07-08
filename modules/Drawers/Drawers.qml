@@ -44,6 +44,7 @@ Variants {
 
             Bar {
                 id: bar
+                screen: drawerScope.modelData
             }
         }
 
