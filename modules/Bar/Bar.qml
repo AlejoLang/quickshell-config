@@ -10,10 +10,12 @@ import "components/Bluetooth"
 import "components/AudioManager"
 import "components/Battery"
 import "components/Multimedia"
+import "components"
 
 Item {
     id: root
     property ShellScreen screen
+    property PopupContent barPopups
     anchors.left: parent.left
     anchors.right: parent.right
     anchors.top: parent.top
