@@ -1,0 +1,78 @@
+import Quickshell.Services.Mpris
+import Quickshell
+import QtQuick
+
+Rectangle {
+    id: root
+    
+    required property ShellScreen screen
+    required property Item bar
+    property list<MprisPlayer> players: Mpris.players.values
+    property int currentPlayerIdx: 0
+    property MprisPlayer currentPlayer: players[currentPlayerIdx]
+
+    onPlayersChanged: {
+        if(currentPlayerIdx >= players.length) {
+            currentPlayerIdx = players.length - 1;
+        }
+    }
+
+    implicitHeight: parent.height
+    implicitWidth: mediaRow.width
+    color: "transparent"
+
+    Row {
+        id: mediaRow
+        spacing: 5
+        width: mediaIcon.width + mediaText.width + 5
+        height: parent.implicitHeight
+
+        Text {
+            id: mediaIcon
+            text: 'graphic_eq'
+            font.family: "Material Symbols Rounded"
+            font.pixelSize: 24
+            color: "#252525"
+            anchors.verticalCenter: parent.verticalCenter
+        }
+        Text {
+            id: mediaText
+            text: {
+                if (root.currentPlayer) {
+                    return root.currentPlayer.trackTitle.length > 40 ? 
+                        root.currentPlayer.trackTitle.substring(0, 40) + "..." :
+                        root.currentPlayer.trackTitle;
+                }
+                return "No track playing";
+            }
+            font.pixelSize: 16
+            font.family: "CaskaydiaCove Nerd Font"
+            color: "#252525"
+            anchors.verticalCenter: parent.verticalCenter
+        }
+    }
+    MouseArea {
+        anchors.fill: parent
+        hoverEnabled: true
+        onEntered: {
+            root.color = "#d6d6d6"
+        }
+        onExited: {
+            root.color = "transparent"
+        }
+        onClicked: (event) => {
+            if (root.players.length > 0) {
+                root.currentPlayer.togglePlaying();
+            }
+            event.accepted = true;
+        }
+        onWheel: (event) => {
+            if (event.angleDelta.y < 0) {
+                root.currentPlayerIdx = (root.currentPlayerIdx - 1 + root.players.length) % root.players.length;
+            } else if (event.angleDelta.y > 0) {
+                root.currentPlayerIdx = (root.currentPlayerIdx + 1) % root.players.length;
+            }
+            event.accepted = true;
+        }
+    }
+}

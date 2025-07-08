@@ -1,4 +1,6 @@
-import QtQuick 
+import QtQuick
+import QtQuick.Layouts
+import Quickshell
 import "components/Clock"
 import "components/LauncherIcon"
 import "components/Workspaces"
@@ -7,15 +9,17 @@ import "components/Network"
 import "components/Bluetooth"   
 import "components/AudioManager"
 import "components/Battery"
+import "components/Multimedia"
 
 Item {
     id: root
+    property ShellScreen screen
     anchors.left: parent.left
     anchors.right: parent.right
     anchors.top: parent.top
     implicitWidth: parent.implicitWidth
     implicitHeight: 40
-    
+
     Rectangle {
         color: "transparent"
         implicitWidth: parent.implicitWidth
@@ -53,16 +57,16 @@ Item {
                 }
             } 
 
-            Row {
+            RowLayout {
                 id: centerChunk
                 width: parent.width / 3;
                 height: parent.height
-                anchors.verticalCenter: parent.verticalCenter
-                Text {
-                    text: "Center"
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.horizontalCenter: parent.horizontalCenter
-                }
+                Multimedia {
+                    id: multimedia
+                    Layout.alignment: Qt.AlignCenter
+                    bar: root
+                    screen: root.screen
+                } 
             }
 
             Row {
