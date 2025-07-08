@@ -1,6 +1,9 @@
+pragma ComponentBehavior: Bound
+
 import Quickshell.Services.Mpris
 import Quickshell
 import QtQuick
+import "../"
 
 Rectangle {
     id: root
@@ -11,9 +14,11 @@ Rectangle {
     property int currentPlayerIdx: 0
     property MprisPlayer currentPlayer: players[currentPlayerIdx]
 
+
     onPlayersChanged: {
-        if(currentPlayerIdx >= players.length) {
-            currentPlayerIdx = players.length - 1;
+        if(currentPlayerIdx > (players.length - 1)) {
+            currentPlayerIdx = Math.max(0, players.length - 1);
+            currentPlayer = players[currentPlayerIdx];
         }
     }
 
@@ -60,11 +65,13 @@ Rectangle {
         onExited: {
             root.color = "transparent"
         }
-        onClicked: (event) => {
-            if (root.players.length > 0) {
-                root.currentPlayer.togglePlaying();
+        onClicked: {
+            if (popup.visible) {
+                popup.visible = false;
+            } else {
+                popup.changeContent(root.popComponent);
+                popup.visible = true;
             }
-            event.accepted = true;
         }
         onWheel: (event) => {
             if (event.angleDelta.y < 0) {
@@ -74,5 +81,16 @@ Rectangle {
             }
             event.accepted = true;
         }
+    }
+
+    property PopupContent popComponent: PopupContent {
+        owner: root
+        id: popRect
+        MultimediaPopup {
+            id: multimediaPopup
+            currentPlayer: root.currentPlayer
+            players: root.players
+            currentPlayerIdx: root.currentPlayerIdx
+        } 
     }
 }
