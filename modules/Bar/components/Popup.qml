@@ -34,13 +34,13 @@ Scope {
         implicitHeight: popupContent.implicitHeight
         implicitWidth: popupContent.implicitWidth
         anchor.window: root.window
-        anchor.rect.x: root.content.posX
-        anchor.rect.y: root.content.posY
+        anchor.rect.x: root.content?.posX || 0
+        anchor.rect.y: root.content?.posY || 0
         visible: root.visible
         color: "transparent"
         Item {
-            implicitWidth: root.content.children[0].implicitWidth 
-            implicitHeight: root.content.children[0].implicitHeight
+            implicitWidth: root?.content?.children[0]?.implicitWidth || 100
+            implicitHeight: root?.content?.children[0]?.implicitHeight || 100
             id: popupContent
         }
     }
@@ -50,7 +50,6 @@ Scope {
         windows: [popupWindow, root.window]
         onCleared: {
             root.visible = false
-            root.changeContent(null)
         }
     }
     

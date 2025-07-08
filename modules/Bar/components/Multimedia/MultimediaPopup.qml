@@ -60,7 +60,9 @@ Rectangle {
             spacing: 5
             anchors.horizontalCenter: parent.horizontalCenter
             Text {
-                text: root.currentPlayer ? root.currentPlayer.trackTitle : "No track playing"
+                text: (root?.currentPlayer?.trackTitle.length > 30 ? 
+                        root.currentPlayer.trackTitle.substring(0, 30) + "..." : 
+                        root.currentPlayer.trackTitle) || "No track playing"
                 font.pixelSize: 24
                 font.family: "CaskaydiaCove Nerd Font"
                 font.bold: true

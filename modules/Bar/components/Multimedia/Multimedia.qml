@@ -67,7 +67,11 @@ Rectangle {
         }
         onClicked: {
             if (popup.visible) {
-                popup.visible = false;
+                if (popup.content === root.popComponent) {
+                    popup.visible = false;
+                } else {
+                    popup.changeContent(root.popComponent);
+                }
             } else {
                 popup.changeContent(root.popComponent);
                 popup.visible = true;
