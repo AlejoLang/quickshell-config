@@ -34,7 +34,8 @@ Item {
             anchors.fill: parent
             anchors.margins: 8
             anchors.topMargin: root.bar.implicitHeight
-            radius: 18
+            radius: 20
+            antialiasing: false
         }
     }
 }

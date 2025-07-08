@@ -1,7 +1,9 @@
 pragma ComponentBehavior: Bound
 import Quickshell
+import Quickshell.Hyprland
 import QtQuick
 import "../Bar"
+import "../Bar/components"
 
 Variants {
     model: Quickshell.screens
@@ -12,6 +14,8 @@ Variants {
 
         PanelWindow {
             id: drawerWindow
+            property PopupContent popup
+            
             screen: drawerScope.modelData
             exclusionMode: ExclusionMode.Ignore
             color: "transparent"
@@ -44,9 +48,16 @@ Variants {
 
             Bar {
                 id: bar
+                barPopups: drawerWindow.popup
                 screen: drawerScope.modelData
             }
+            Popup {
+                id: popup
+                window: drawerWindow
+                screen: drawerScope.modelData
+                content: drawerWindow.popup
+                visible: false
+            }
         }
-
     } 
 }
