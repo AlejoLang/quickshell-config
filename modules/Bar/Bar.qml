@@ -51,6 +51,7 @@ Item {
                 } 
                 Workspaces {
                     id: workspaces
+                    screen: root.screen
                     anchors.verticalCenter: parent.verticalCenter
                 }
                 CurrentWindow {
