@@ -45,6 +45,14 @@ Rectangle {
                             implicitSize: 32
                             anchors.centerIn: parent
                         } 
+                        MouseArea {
+                            anchors.fill: parent
+                            onClicked: (event) => {
+                                Hyprland.dispatch(`focuswindow address:${parent.modelData.address}`);
+                                workspaces.popupVisible = false; // Hide the popup after focusing
+                                event.accepted = false;
+                            }
+                        }
                     }
                 } 
                 
