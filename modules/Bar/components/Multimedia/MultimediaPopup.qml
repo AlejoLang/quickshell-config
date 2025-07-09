@@ -119,7 +119,7 @@ Rectangle {
                     color: "#d6d6d6"
                 }
                 Rectangle {
-                    width: parent.posAux ?? (root.currentPlayer ? root.currentPlayer.position / root.currentPlayer.length * parent.width : 0) - 5
+                    width: parent.posAux ?? (root.currentPlayer ? root.currentPlayer.position / root.currentPlayer.length * parent.width : 0)
                     height: parent.height
                     radius: 5
                     color: "#252525"  
@@ -128,7 +128,8 @@ Rectangle {
                     anchors.fill: parent
                     onReleased: (event) => {
                         if (event.button == Qt.LeftButton) {
-                            const secs = (event.x * root.currentPlayer.length) / parent.width;
+                            const secsPix = parent.posAux ?? event.x;
+                            const secs = (secsPix * root.currentPlayer.length) / parent.width;
                             if (root.currentPlayer) {
                                 root.currentPlayer.seek(secs - root.currentPlayer.position);
                             }
@@ -138,7 +139,7 @@ Rectangle {
                     onPositionChanged: (event) => {
                         if (event.buttons == Qt.LeftButton) {
                             if (root.currentPlayer) {
-                                parent.posAux = event.x 
+                                parent.posAux = Math.min(event.x, parent.width);
                             }
                         }
                     }
