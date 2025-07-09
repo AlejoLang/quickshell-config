@@ -15,8 +15,9 @@ Singleton {
     readonly property HyprlandWorkspace focusedWorkspace: Hyprland.focusedWorkspace
     readonly property HyprlandMonitor focusedMonitor: Hyprland.focusedMonitor
     readonly property int activeWsId: focusedWorkspace?.id ?? 1
-    readonly property list<DesktopEntry> clients: []
+    property list<Client> clients
     property DesktopEntry activeClient: null
+    property list<WorkspaceClients> workspacesClients
 
     function dispatch(request: string): void {
         Hyprland.dispatch(request);
@@ -27,6 +28,23 @@ Singleton {
         activeClientProcess.running = true;
     }
 
+    function getClientsByWorkspace() {
+        const aux = [];
+        for (const workspace of root.workspaces.values) {
+            const clients = root.clients.filter(c => {
+                return c.workspace.id === workspace.id;
+            });
+            if (clients.length > 0) {
+                const workspaceClients = workspaceClientsComp.createObject(root, {
+                    workspace: workspace,
+                    clients: clients
+                });
+                aux.push(workspaceClients);
+            }
+        }
+        root.workspacesClients = aux;
+    }
+
     Timer {
         interval: 1
         repeat: false
@@ -35,6 +53,8 @@ Singleton {
             Hyprland.refreshMonitors();
             Hyprland.refreshWorkspaces();
             Hyprland.refreshToplevels();
+            root.getClients()
+            root.getClientsByWorkspace();
         }
     }
 
@@ -52,6 +72,7 @@ Singleton {
             else {
                 Hyprland.refreshToplevels();
                 root.getClients();
+                root.getClientsByWorkspace()
             }
         }
     }
@@ -63,13 +84,14 @@ Singleton {
         stdout: StdioCollector {
             onStreamFinished: {
                 const jsonData = JSON.parse(text);
+                const aux = []
                 for(const client of jsonData) {
-                    const name = client.initialClass.toLowerCase().replace(/ /g, "-");
-                    const app = DesktopEntries.applications.values.find(a => {
-                        return a.id.toLowerCase() === name}) ?? null;
-                    root.clients.push(app);
+                    const newClient = clientComp.createObject(root, {
+                        lastIpcObject: client
+                    });
+                    aux.push(newClient);
                 }
-                
+                root.clients = aux;
             }
         }
     }
@@ -112,9 +134,19 @@ Singleton {
         readonly property int focusHistoryId: lastIpcObject.focusHistoryID
     }
 
+    component WorkspaceClients: QtObject {
+        property HyprlandWorkspace workspace
+        property list<Client> clients
+    }
+
     Component {
         id: clientComp
-
         Client {}
+    }
+    Component {
+        id: workspaceClientsComp
+        WorkspaceClients {
+            
+        }
     }
 }
