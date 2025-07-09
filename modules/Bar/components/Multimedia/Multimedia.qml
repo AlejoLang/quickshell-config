@@ -10,16 +10,16 @@ Rectangle {
     
     required property ShellScreen screen
     required property Item bar
-    property list<MprisPlayer> players: Mpris.players.values
+    property list<MprisPlayer> players: Mpris.players.values ?? null
     property int currentPlayerIdx: 0
-    property MprisPlayer currentPlayer: players[currentPlayerIdx]
+    property MprisPlayer currentPlayer: players[currentPlayerIdx] ?? null
 
 
     onPlayersChanged: {
         if(currentPlayerIdx > (players.length - 1)) {
-            currentPlayerIdx = Math.max(0, players.length - 1);
-            currentPlayer = players[currentPlayerIdx];
+            currentPlayerIdx = players.length - 1;
         }
+        currentPlayer = players[currentPlayerIdx] ?? null;
     }
 
     implicitHeight: parent.height
@@ -88,6 +88,8 @@ Rectangle {
     }
 
     property PopupContent popComponent: PopupContent {
+        width: multimediaPopup.width
+        height: multimediaPopup.height
         owner: root
         id: popRect
         MultimediaPopup {

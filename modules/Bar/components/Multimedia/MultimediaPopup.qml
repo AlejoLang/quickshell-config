@@ -1,6 +1,5 @@
 pragma ComponentBehavior: Bound
 import QtQuick
-import QtQuick.Controls
 import QtQuick.Effects
 import Quickshell.Services.Mpris
 import "../../../general" 
@@ -84,7 +83,6 @@ Rectangle {
                 text: "keyboard_arrow_left"
                 onClicked: {
                     const newIdx = (root.currentPlayerIdx - 1 + root.players.length) % root.players.length;
-                    console.log(root.currentPlayerIdx, newIdx, root.players.length);
                     root.currentPlayerIdx = newIdx;
                     root.currentPlayer = root.players[newIdx];
                 }
@@ -101,7 +99,6 @@ Rectangle {
                 text: "keyboard_arrow_right"
                 onClicked: {
                     const newIdx = (root.currentPlayerIdx + 1) % root.players.length;
-                    console.log(root.currentPlayerIdx, newIdx, root.players.length);
                     root.currentPlayerIdx = newIdx;
                     root.currentPlayer = root.players[newIdx];
                 }
@@ -130,17 +127,15 @@ Rectangle {
                 MouseArea {
                     anchors.fill: parent
                     onReleased: (event) => {
-                        console.log("Mouse released at", event.x, event.y);
                         if (event.button == Qt.LeftButton) {
                             const secs = (event.x * root.currentPlayer.length) / parent.width;
                             if (root.currentPlayer) {
                                 root.currentPlayer.seek(secs - root.currentPlayer.position);
-                                parent.posAux = null; // Reset aux position after seeking
                             }
+                            parent.posAux = null; // Reset the auxiliary position
                         }
                     }
                     onPositionChanged: (event) => {
-                        console.log("Mouse position changed", event.x, event.y);
                         if (event.buttons == Qt.LeftButton) {
                             if (root.currentPlayer) {
                                 parent.posAux = event.x 
