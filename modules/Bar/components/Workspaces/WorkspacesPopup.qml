@@ -8,11 +8,23 @@ import "root:/services/"
 Rectangle {
     id: root
     property ShellScreen screen
-    property real scaleFactor: (200/screen.width).toFixed(2);
-    color: "#252525"
+    property real scaleFactor: (clamp((screen.width - 400)/Hyprland.workspacesClients.length, 100, 400)/screen.width).toFixed(2);
+    color: "#EFEFEF"
     implicitHeight: workspacesRowLayout.height + 20
     implicitWidth: workspacesRowLayout.width + 20
     radius: 10
+    Component.onCompleted: {
+        const as = (clamp((screen.width - 200)/Hyprland.workspacesClients.length, 100.0, 600.0)/screen.width).toFixed(2);
+        console.log(as)
+        console.log("WorkspacesPopup initialized with scaleFactor:", root.scaleFactor);
+        console.log("Workspaces count:", Hyprland.workspacesClients.length);
+        console.log("Screen width:", root.screen.width);
+    }
+
+    function clamp (value, min, max) {
+        return Math.max(min, Math.min(max, value));
+    }
+
     RowLayout {
         id: workspacesRowLayout
         anchors.verticalCenter: parent.verticalCenter
