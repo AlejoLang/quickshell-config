@@ -1,6 +1,7 @@
 import QtQuick
 import Quickshell
-import "root:/services/"
+import "root:/services/" as Services
+import "../"
 
 Rectangle {
     id: root
@@ -19,12 +20,12 @@ Rectangle {
             font.family: "Material Symbols Rounded"
             font.pixelSize: 24
             color: "#252525"
-            text: Battery.getBatteryIcon()
+            text: Services.Battery.getBatteryIcon()
             anchors.verticalCenter: parent.verticalCenter 
         }
         Text {
             id: batteryPercentage
-            text: Battery.getBatteryPercentage() + "%"
+            text: Services.Battery.getBatteryPercentage() + "%"
             font.pixelSize: 16
             font.family: "CaskaydiaCove Nerd Font"
             color: "#252525"
@@ -38,9 +39,30 @@ Rectangle {
         hoverEnabled: true
         onEntered: {
             root.color = "#d6d6d6"
+            if (hoverPopup.visible) {
+                if(hoverPopup.content === root.batteryHoverPopup) {
+                    hoverPopup.visible = false;
+                } else {
+                    hoverPopup.changeContent(root.batteryHoverPopup);
+                }
+            } else {
+                hoverPopup.changeContent(root.batteryHoverPopup);
+                hoverPopup.visible = true;
+            }
         }
         onExited: {
             root.color = "transparent"
+            if (hoverPopup.visible) {
+                hoverPopup.visible = false;
+            }
+        }
+    }
+
+    property PopupContent batteryHoverPopup: PopupContent {
+        id: batteryHoverPopup
+        owner: root
+        BatteryHoverPopup {
+
         }
     }
 }
