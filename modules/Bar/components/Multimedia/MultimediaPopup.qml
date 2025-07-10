@@ -6,9 +6,9 @@ import "../../../general"
 
 Rectangle {
     id: root
-    property list<MprisPlayer> players: Mpris.players.values
-    property int currentPlayerIdx: 0
-    property MprisPlayer currentPlayer: players[currentPlayerIdx]
+    property list<MprisPlayer> players
+    property int currentPlayerIdx
+    property MprisPlayer currentPlayer
     implicitHeight: 200
     implicitWidth: 600
     radius: 20
@@ -16,11 +16,10 @@ Rectangle {
     border.color: "#000000"
 
     onPlayersChanged: {
-        console.log(players.length)
         if(currentPlayerIdx > (players.length - 1)) {
             currentPlayerIdx = Math.max(0, players.length - 1);
-            currentPlayer = players[currentPlayerIdx];
         }
+        currentPlayer = players[currentPlayerIdx];
     }
 
     Image {
@@ -55,13 +54,18 @@ Rectangle {
         anchors.fill: parent
         anchors.margins: 10
         spacing: 20
+        width: parent.width
         Column {
             spacing: 5
             anchors.horizontalCenter: parent.horizontalCenter
+            width: parent.width - 20
             Text {
-                text: (root?.currentPlayer?.trackTitle.length > 30 ? 
-                        root.currentPlayer.trackTitle.substring(0, 30) + "..." : 
-                        root.currentPlayer.trackTitle) || "No track playing"
+                text: (root.currentPlayer.trackTitle) || "No track playing"
+                clip: true
+                width: parent.width
+                elide: Text.ElideRight
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
                 font.pixelSize: 24
                 font.family: "CaskaydiaCove Nerd Font"
                 font.bold: true
@@ -69,7 +73,7 @@ Rectangle {
                 anchors.horizontalCenter: parent.horizontalCenter
             } 
             Text {
-                text: root.currentPlayer ? root.currentPlayer.trackArtist : "Unknown Artist"
+                text: root.currentPlayer.trackArtist || "Unknown Artist"
                 font.pixelSize: 18
                 font.family: "CaskaydiaCove Nerd Font"
                 color: "#252525"

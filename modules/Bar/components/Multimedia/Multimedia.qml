@@ -17,9 +17,15 @@ Rectangle {
 
     onPlayersChanged: {
         if(currentPlayerIdx > (players.length - 1)) {
-            currentPlayerIdx = players.length - 1;
+            currentPlayerIdx = Math.max(0, players.length - 1);
         }
         currentPlayer = players[currentPlayerIdx] ?? null;
+    }
+    
+    onCurrentPlayerIdxChanged: {
+        if (players && players.length > 0 && currentPlayerIdx >= 0 && currentPlayerIdx < players.length) {
+            currentPlayer = players[currentPlayerIdx] ?? null;
+        }
     }
 
     implicitHeight: parent.height
@@ -94,9 +100,11 @@ Rectangle {
         id: popRect
         MultimediaPopup {
             id: multimediaPopup
-            currentPlayer: root.currentPlayer
             players: root.players
             currentPlayerIdx: root.currentPlayerIdx
+            currentPlayer: root.currentPlayer
+            onCurrentPlayerIdxChanged: root.currentPlayerIdx = currentPlayerIdx
+            onCurrentPlayerChanged: root.currentPlayer = currentPlayer
         } 
     }
 }
