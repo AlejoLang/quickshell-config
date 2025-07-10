@@ -28,6 +28,9 @@ const batteryIconsLevelConnected = {
 };
 
 const getIcon = (batteryStatus, batteryLevel, icon_name) => {
+    console.log(
+        `Battery status: ${batteryStatus}, Level: ${batteryLevel}, Icon name: ${icon_name}`
+    );
     switch (batteryStatus) {
         case 'Fully Charged':
             return batteryIconsNames[icon_name];
@@ -46,8 +49,9 @@ const getIcon = (batteryStatus, batteryLevel, icon_name) => {
                 return batteryIconsLevelDisconnected[80];
             } else if (batteryLevel <= 90) {
                 return batteryIconsLevelDisconnected[90];
+            } else {
+                return batteryIconsNames[icon_name] || 'battery_full';
             }
-            break;
         case 'Charging':
             if (batteryLevel === 0) {
                 return batteryIconsLevelConnected[0];
