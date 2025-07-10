@@ -1,9 +1,10 @@
 import QtQuick
 import "root:/services/" as Services
+import "../"
 
 Rectangle {
     id: root
-    implicitHeight: parent.implicitHeight
+    implicitHeight: parent.height
     implicitWidth: audioRow.width
     color: "transparent"
 
@@ -11,6 +12,7 @@ Rectangle {
         id: audioRow
         spacing: 5
         width: audioIcon.width + audioVolume.width + 10 
+        anchors.verticalCenter: parent.verticalCenter
         Text {
             id: audioIcon
             text: Services.Audio.getCurrentSinkIcon()
@@ -46,6 +48,26 @@ Rectangle {
                 Services.Audio.changeCurrentSinkVolume(0.05);
             }
             event.accepted = true;
+        }
+        onClicked: {
+            if (popup.visible) {
+                if(popup.content === root.popComponent) {
+                    popup.visible = false;
+                } else {
+                    popup.changeContent(root.popComponent);
+                }
+            } else {
+                popup.changeContent(root.popComponent);
+                popup.visible = true;
+            }
+        }
+    }
+
+    property PopupContent popComponent: PopupContent {
+        owner: root
+        id: audioPopup  
+        AudioPopup {
+            id: audioPopupContent
         }
     }
 }
