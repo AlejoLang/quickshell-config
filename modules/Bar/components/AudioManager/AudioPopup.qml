@@ -73,6 +73,7 @@ Rectangle {
                                 height: 10
                                 width: parent.width - 20
                                 percentaje: modelData.audio.volume.toFixed(2)
+                                dynamic: true
                                 onPercentajeChanged: {
                                     Services.Audio.setNodeVolume(modelData.id, percentaje.toFixed(2));
                                 }

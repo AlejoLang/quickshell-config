@@ -1,7 +1,6 @@
 import QtQuick
 import Quickshell
 import "root:/services/"
-import "./popup/"
 
 Rectangle {
     id: root
@@ -11,8 +10,8 @@ Rectangle {
     
     Row {
         id: batteryRow
-        width: batteryRow.children.reduce((acc, child) => acc + child.width, 0)
-        height: children.values.reduce((acc, child) => Math.max(acc, child.height), 0)
+        width: batteryIcon.width + batteryPercentage.width 
+        height: Math.max(batteryIcon.height, batteryPercentage.height)
         anchors.fill: parent
 
         Text {
