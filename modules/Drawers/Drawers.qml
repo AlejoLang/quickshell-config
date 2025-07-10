@@ -15,6 +15,7 @@ Variants {
         PanelWindow {
             id: drawerWindow
             property PopupContent popup
+            property PopupContent hoverPopup
             
             screen: drawerScope.modelData
             exclusionMode: ExclusionMode.Ignore
@@ -50,6 +51,13 @@ Variants {
                 id: bar
                 barPopups: drawerWindow.popup
                 screen: drawerScope.modelData
+            }
+            Popup {
+                id: hoverPopup
+                window: drawerWindow
+                screen: drawerScope.modelData
+                content: drawerWindow.hoverPopup
+                visible: false
             }
             Popup {
                 id: popup
