@@ -1,46 +1,48 @@
 import QtQuick
 
 Rectangle {
-    property real progress
+    id: root
+    property real percentaje: 0 // 0 to 1
+    property var posAux: null
+    property bool dynamic: false // If true, the percentaje will be updated dynamically based on mouse position. If false, the percentaje will change only on mouse release
 
-    function getProgress() {
-        return progress;
+    function getPercentaje() {
+        return percentaje;
+    }
+
+    function clamp(value, min, max) {
+        return Math.max(min, Math.min(max, value));
     }
 
     Rectangle {
-        anchors.left: parent.left
-        anchors.top: parent.top
-        anchors.bottom: parent.bottom
-        width: parent.width * (parent.progress || 0)
-        color: "#EFEFEF"
+        anchors.fill: parent
+        radius: 5
+        color: "#b3b3b3"
     }
     Rectangle {
-        anchors.right: parent.right
-        anchors.top: parent.top
-        anchors.bottom: parent.bottom
-        width: parent.width * (1 - (parent.progress || 0))
-        color: "#131313"
-    }
-
+        width: root.dynamic ? ((parent.percentaje ?? 0) * parent.width) : (root.posAux ?? ((root.percentaje ?? 0) * parent.width))
+        height: parent.height
+        radius: 5
+        color: "#252525"
+    }    
     MouseArea {
         anchors.fill: parent
-        onPositionChanged: (event) =>{
-            event.accepted = true;
-            if (event.buttons === Qt.LeftButton) {
-                var newProgress = event.x / parent.width;
-                if (newProgress < 0) newProgress = 0;
-                if (newProgress > 1) newProgress = 1;
-                parent.progress = newProgress;
+        onReleased: (event) => {
+            if (event.button === Qt.LeftButton) {
+                root.percentaje = root.clamp((root.posAux ?? event.x) / parent.width, 0, 1);
+                root.posAux = null;
             }
         }
-        onClicked: (event) => {
-            event.accepted = true;
-            if (event.button === Qt.LeftButton) {
-                var newProgress = event.x / parent.width;
-                if (newProgress < 0) newProgress = 0;
-                if (newProgress > 1) newProgress = 1;
-                parent.progress = newProgress;
+        onPositionChanged: (event) =>{
+            if (event.buttons === Qt.LeftButton) {
+                root.posAux = root.clamp(event.x, 0, parent.width); 
+                if (root.dynamic) {root.percentaje = root.clamp(root.posAux / parent.width, 0, 1)};
             }
+        }
+        onWheel: (event) => {
+            root.percentaje += (event.angleDelta.y > 0 ? 0.01 : -0.01);
+            if (root.percentaje < 0) root.percentaje = 0;
+            if (root.percentaje > 1) root.percentaje = 1;
         }
     }
 }
