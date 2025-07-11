@@ -1,6 +1,7 @@
 pragma ComponentBehavior: Bound
 import QtQuick
 import QtQuick.Effects
+import QtQuick.Layouts
 import Quickshell.Services.Mpris
 import "../../../general" 
 
@@ -11,9 +12,9 @@ Rectangle {
     property MprisPlayer currentPlayer
     implicitHeight: 200
     implicitWidth: 600
-    radius: 20
-    border.width: 2
-    border.color: "#000000"
+    color: "#EFEFEF"
+    bottomLeftRadius: 10
+    bottomRightRadius: 10
 
     onPlayersChanged: {
         if(currentPlayerIdx > (players.length - 1)) {
@@ -24,7 +25,9 @@ Rectangle {
 
     Image {
         id: coverImg
-        anchors.fill: parent
+        width: parent.width - 20
+        height: parent.height - 20
+        anchors.centerIn: parent
         source: (root.currentPlayer?.trackArtUrl.toString() || "")
         fillMode: Image.PreserveAspectCrop
         opacity: 0.4
@@ -33,51 +36,56 @@ Rectangle {
             maskSource: coverMask
             maskEnabled: true
             maskInverted: false
-            brightness: -0.2
+            brightness: -0.3
         }
     }
     Item {
         id: coverMask
-        width: coverImg.width
-        height: coverImg.height
+        width: coverImg.width - 20
+        height: coverImg.height - 20
+        anchors.centerIn: parent
         visible: false
         layer.enabled: true
         Rectangle {
+            radius: 8
             anchors.fill: parent
-            radius: 20
             antialiasing: false
             color: "white"
         }
     }
 
-    Column {
+    ColumnLayout {
         anchors.fill: parent
         anchors.margins: 10
         spacing: 20
         width: parent.width
-        Column {
+        ColumnLayout {
             spacing: 5
             anchors.horizontalCenter: parent.horizontalCenter
             width: parent.width - 20
             Text {
                 text: (root.currentPlayer.trackTitle) || "No track playing"
+                Layout.fillWidth: true
+                Layout.maximumHeight: font.pixelSize + 10
                 clip: true
-                width: parent.width
                 elide: Text.ElideRight
+                padding: 5
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
                 font.pixelSize: 24
                 font.family: "CaskaydiaCove Nerd Font"
                 font.bold: true
                 color: "#252525"
-                anchors.horizontalCenter: parent.horizontalCenter
             } 
             Text {
+                Layout.fillWidth: true
+                Layout.maximumHeight: font.pixelSize + 10
                 text: root.currentPlayer.trackArtist || "Unknown Artist"
                 font.pixelSize: 18
                 font.family: "CaskaydiaCove Nerd Font"
                 color: "#252525"
-                anchors.horizontalCenter: parent.horizontalCenter
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignHCenter
             }
         }
         Row {
@@ -85,6 +93,7 @@ Rectangle {
             anchors.horizontalCenter: parent.horizontalCenter
             DefaultButton {
                 text: "keyboard_arrow_left"
+                backgroundColor: "#252525"
                 onClicked: {
                     const newIdx = (root.currentPlayerIdx - 1 + root.players.length) % root.players.length;
                     root.currentPlayerIdx = newIdx;
@@ -93,6 +102,7 @@ Rectangle {
             } 
             DefaultButton {
                 text: root.currentPlayer.isPlaying ? "pause" : "play_arrow"
+                backgroundColor: "#252525"
                 onClicked: {
                     if (root.currentPlayer) {
                         root.currentPlayer.togglePlaying();
@@ -101,6 +111,7 @@ Rectangle {
             }
             DefaultButton {
                 text: "keyboard_arrow_right"
+                backgroundColor: "#252525"
                 onClicked: {
                     const newIdx = (root.currentPlayerIdx + 1) % root.players.length;
                     root.currentPlayerIdx = newIdx;
@@ -120,7 +131,7 @@ Rectangle {
                 Rectangle {
                     anchors.fill: parent
                     radius: 5
-                    color: "#d6d6d6"
+                    color: "#7c7c7c"
                 }
                 Rectangle {
                     width: parent.posAux ?? (root.currentPlayer ? root.currentPlayer.position / root.currentPlayer.length * parent.width : 0)

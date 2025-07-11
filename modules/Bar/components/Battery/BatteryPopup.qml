@@ -82,7 +82,7 @@ Rectangle {
                     Layout.preferredHeight: 20
                     onCheckedChanged: {
                         if (hyprsunsetSwitch.checked) {
-                            Services.Hyprland.dispatch(`exec hyprctl hyprsunset temperature ${Math.round(hyprsunsetSlider.percentaje * 10000)}`);
+                            Services.Hyprland.dispatch(`exec hyprctl hyprsunset temperature ${Math.round(hyprsunsetSlider.percentage * 10000)}`);
                         } else {
                             Services.Hyprland.dispatch(`exec hyprctl hyprsunset temperature 6000`);
                         }
@@ -96,18 +96,18 @@ Rectangle {
                     id: hyprsunsetSlider
                     Layout.fillWidth: true
                     Layout.preferredHeight: 10
-                    percentaje: (6000/10000)
+                    percentage: (6000/10000)
                     dynamic: false
-                    onPercentajeChanged: {
+                    onPercentageChanged: {
                         if (hyprsunsetSwitch.checked) {
-                            Services.Hyprland.dispatch(`exec hyprctl hyprsunset temperature ${Math.round(hyprsunsetSlider.percentaje * 10000)}`);
+                            Services.Hyprland.dispatch(`exec hyprctl hyprsunset temperature ${Math.round(hyprsunsetSlider.percentage * 10000)}`);
                         }
                     }
                 }
                 Text {
                     Layout.preferredWidth: 50
                     Layout.rightMargin: 5
-                    text: Math.round(hyprsunsetSlider.getLivePercentaje() * 10000) + "K"
+                    text: Math.round(hyprsunsetSlider.getLivePercentage() * 10000) + "K"
                     font.pixelSize: 16
                     font.family: "CaskaydiaCove Nerd Font"
                     color: "#252525"
@@ -158,16 +158,16 @@ Rectangle {
                                 id: brightnessSlider
                                 Layout.fillWidth: true
                                 Layout.preferredHeight: 10
-                                percentaje: (modelData.currentBrightness / modelData.maxBrightness)
+                                percentage: (modelData.currentBrightness / modelData.maxBrightness)
                                 dynamic: true
-                                onPercentajeChanged: {
-                                    Services.Display.setBrightness(modelData, brightnessSlider.percentaje);
+                                onPercentageChanged: {
+                                    Services.Display.setBrightness(modelData, brightnessSlider.percentage);
                                 }
                             }
                             Text {
                                 Layout.preferredWidth: 50
                                 Layout.rightMargin: 5
-                                text: Math.round(brightnessSlider.getLivePercentaje() * 100) + "%"
+                                text: Math.round(brightnessSlider.getLivePercentage() * 100) + "%"
                                 font.pixelSize: 16
                                 font.family: "CaskaydiaCove Nerd Font"
                                 color: "#252525"

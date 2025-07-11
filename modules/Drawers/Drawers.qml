@@ -64,9 +64,6 @@ Variants {
             Bar{
                 id: bar
                 barPopups: drawerWindow.popup
-                barHoverPopups: drawerWindow.hoverPopup
-                popupObject: popup
-                hoverPopupObject: hoverPopup
                 screen: drawerScope.modelData
             }
             Popup {

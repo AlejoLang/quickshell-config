@@ -35,7 +35,8 @@ Rectangle {
                 MouseArea {
                     anchors.fill: parent
                     onClicked: {
-                        console.log(trayItemMenuOpener.children.values)
+                        console.log(trayItem.modelData.onlyMenu)
+                        trayItem.modelData.activate()
                     }
                     hoverEnabled: true
                     onEntered: {

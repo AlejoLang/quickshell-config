@@ -77,10 +77,10 @@ Rectangle {
                                     id: sinkSlider
                                     Layout.preferredHeight: 10
                                     Layout.fillWidth: true
-                                    percentaje: modelData.audio.volume.toFixed(2)
+                                    percentage: modelData.audio.volume.toFixed(2)
                                     dynamic: true
-                                    onPercentajeChanged: {
-                                        Services.Audio.setNodeVolume(modelData.id, percentaje.toFixed(2));
+                                    onPercentageChanged: {
+                                        Services.Audio.setNodeVolume(modelData.id, percentage.toFixed(2));
                                     }
                                 }
                                 Text {
@@ -159,10 +159,10 @@ Rectangle {
                                     id: sourceSlider
                                     Layout.preferredHeight: 10
                                     Layout.fillWidth: true
-                                    percentaje: modelData.audio.volume.toFixed(2)
+                                    percentage: modelData.audio.volume.toFixed(2)
                                     dynamic: true
-                                    onPercentajeChanged: {
-                                        Services.Audio.setNodeVolume(modelData.id, percentaje.toFixed(2));
+                                    onPercentageChanged: {
+                                        Services.Audio.setNodeVolume(modelData.id, percentage.toFixed(2));
                                     }
                                 }
                                 Text {
