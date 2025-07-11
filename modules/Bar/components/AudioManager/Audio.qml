@@ -35,12 +35,6 @@ Rectangle {
     MouseArea {
         anchors.fill: parent
         hoverEnabled: true
-        onEntered: {
-            root.color = "#d6d6d6"
-        }
-        onExited: {
-            root.color = "transparent"
-        }
         onWheel: (event) => {
             if (event.angleDelta.y < 0) {
                 Services.Audio.changeCurrentSinkVolume(-0.05);
@@ -49,13 +43,11 @@ Rectangle {
             }
             event.accepted = true;
         }
-        onClicked: {
+        onEntered: {
             if (popup.visible) {
-                if(popup.content === root.popComponent) {
-                    popup.visible = false;
-                } else {
-                    popup.changeContent(root.popComponent);
-                }
+                if(popup.content !== root.popComponent) {
+                    popup.changeContent(root.popComponent)
+                } 
             } else {
                 popup.changeContent(root.popComponent);
                 popup.visible = true;
@@ -66,6 +58,8 @@ Rectangle {
     property PopupContent popComponent: PopupContent {
         owner: root
         id: audioPopup  
+        width: audioPopupContent.width
+        height: audioPopupContent.height
         AudioPopup {
             id: audioPopupContent
         }

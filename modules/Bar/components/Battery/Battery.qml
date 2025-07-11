@@ -11,9 +11,10 @@ Rectangle {
     
     Row {
         id: batteryRow
-        width: batteryIcon.width + batteryPercentage.width 
+        width: batteryIcon.width + batteryPercentage.width + 10
         height: Math.max(batteryIcon.height, batteryPercentage.height)
         anchors.fill: parent
+        padding: 5
 
         Text {
             id: batteryIcon
@@ -38,31 +39,26 @@ Rectangle {
         anchors.fill: parent
         hoverEnabled: true
         onEntered: {
-            root.color = "#d6d6d6"
-            if (hoverPopup.visible) {
-                if(hoverPopup.content === root.batteryHoverPopup) {
-                    hoverPopup.visible = false;
+            if (popup && popup.visible) {
+                if(popup.content === root.batteryPopup) {
+                    return;
                 } else {
-                    hoverPopup.changeContent(root.batteryHoverPopup);
+                    popup.changeContent(root.batteryPopup);
                 }
-            } else {
-                hoverPopup.changeContent(root.batteryHoverPopup);
-                hoverPopup.visible = true;
-            }
-        }
-        onExited: {
-            root.color = "transparent"
-            if (hoverPopup.visible) {
-                hoverPopup.visible = false;
+            } else if (popup) {
+                popup.changeContent(root.batteryPopup);
+                popup.visible = true;
             }
         }
     }
 
-    property PopupContent batteryHoverPopup: PopupContent {
-        id: batteryHoverPopup
+    property PopupContent batteryPopup: PopupContent {
+        id: batteryPopup
         owner: root
-        BatteryHoverPopup {
-
+        width: batteryPopupContent.width
+        height: batteryPopupContent.height
+        BatteryPopup {
+            id: batteryPopupContent
         }
     }
 }

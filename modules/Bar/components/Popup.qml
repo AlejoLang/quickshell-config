@@ -8,8 +8,19 @@ Scope {
     property PopupContent content
     property var window
     property bool visible
+    property bool isHoverPopup
+    property real absX
+    property real absY
 
     id: root
+
+    function contains(point) {
+        if (point.x >= root.content.posX && point.x <= root.content.posX + root.content.implicitWidth &&
+            point.y >= root.content.posY && point.y <= root.content.posY + root.content.implicitHeight) {
+            return true;
+        }
+        return false;
+    }
     
     function changeContent(newContent: PopupContent) {
         if(root.content) {
@@ -21,12 +32,14 @@ Scope {
         }
         const locOw = window.itemPosition(root.content.owner);
         root.content.posX = locOw.x + (root.content.owner.width / 2) - (root.content.children[0].implicitWidth / 2);
-        root.content.posY = locOw.y + root.content.owner.height + 10;
+        root.content.posY = locOw.y + root.content.owner.height ;
         if (root.content.posX < window.x + 10) {
             root.content.posX = window.x + 10;
         } else if (root.content.posX + root.content.children[0].implicitWidth > window.x + window.width - 10) {
             root.content.posX = window.x + window.width - root.content.children[0].implicitWidth - 10;
         }
+        root.absX = locOw.x + (root.content.owner.width / 2) - (root.content.children[0].implicitWidth / 2);
+        root.absY = locOw.y + root.content.owner.height;
     }
    
     PopupWindow {
@@ -44,13 +57,4 @@ Scope {
             id: popupContent
         }
     }
-    
-    HyprlandFocusGrab {
-        active: root.visible
-        windows: [popupWindow, root.window]
-        onCleared: {
-            root.visible = false
-        }
-    }
-    
 }

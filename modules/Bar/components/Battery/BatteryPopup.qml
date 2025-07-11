@@ -4,18 +4,18 @@ import Quickshell.Services.UPower
 
 Rectangle {
     id: root
-    implicitWidth: batteryHoverPopupColumn.width
-    implicitHeight: batteryHoverPopupColumn.height
+    implicitWidth: batteryPopupColumn.width
+    implicitHeight: batteryPopupColumn.height
     color: "#EFEFEF"
     radius: 10
     Column {
-        id: batteryHoverPopupColumn
-        width: Math.max(batteryHoverPopupStatus.width, batteryHoverPopupTime.width) + 20
-        height: batteryHoverPopupColumn.childrenRect.height + 20
+        id: batteryPopupColumn
+        width: Math.max(batteryPopupStatus.width, batteryPopupTime.width) + 20
+        height: batteryPopupColumn.childrenRect.height + 20
         spacing: 4
         padding: 10
         Text {
-            id: batteryHoverPopupStatus
+            id: batteryPopupStatus
             text: Services.Battery.getBatteryState()
             font.bold: true
             font.pixelSize: 16
@@ -24,7 +24,7 @@ Rectangle {
             anchors.horizontalCenter: parent.horizontalCenter
         }
         Text {
-            id: batteryHoverPopupRate
+            id: batteryPopupRate
             text: Math.abs(Services.Battery.getBatteryRate()) + " W"
             font.pixelSize: 14
             font.family: "CaskaydiaCove Nerd Font"
@@ -32,7 +32,7 @@ Rectangle {
             anchors.horizontalCenter: parent.horizontalCenter
         }
         Text {
-            id: batteryHoverPopupTime
+            id: batteryPopupTime
             text: {
                 const timeInSeconds = Services.Battery.getTime();
                 const hours = Math.floor(timeInSeconds / 3600);
@@ -48,6 +48,7 @@ Rectangle {
                         return '';
                 } 
             }
+            anchors.horizontalCenter: parent.horizontalCenter
         }
     }
 }

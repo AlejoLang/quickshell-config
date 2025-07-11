@@ -66,15 +66,9 @@ Rectangle {
         anchors.fill: parent
         hoverEnabled: true
         onEntered: {
-            root.color = "#d6d6d6"
-        }
-        onExited: {
-            root.color = "transparent"
-        }
-        onClicked: {
             if (popup.visible) {
                 if (popup.content === root.popComponent) {
-                    popup.visible = false;
+                    return;
                 } else {
                     popup.changeContent(root.popComponent);
                 }
