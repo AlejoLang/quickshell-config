@@ -10,7 +10,9 @@ Rectangle {
     property list<PwNode> sourcesList: Services.Audio.sourcesList
     implicitWidth: 400
     implicitHeight: nodesColumn.height
-    radius: 10
+    color: "#EFEFEF"
+    bottomLeftRadius: 10
+    bottomRightRadius: 10
 
     Column {
         id: nodesColumn
@@ -68,16 +70,31 @@ Rectangle {
                                     } 
                                 }
                             }
-                            Slide {
-                                id: sinkSlider
-                                height: 10
-                                width: parent.width - 20
-                                percentaje: modelData.audio.volume.toFixed(2)
-                                dynamic: true
-                                onPercentajeChanged: {
-                                    Services.Audio.setNodeVolume(modelData.id, percentaje.toFixed(2));
+                            RowLayout {
+                                width: parent.width
+                                spacing: 5
+                                Slide {
+                                    id: sinkSlider
+                                    Layout.preferredHeight: 10
+                                    Layout.fillWidth: true
+                                    percentaje: modelData.audio.volume.toFixed(2)
+                                    dynamic: true
+                                    onPercentajeChanged: {
+                                        Services.Audio.setNodeVolume(modelData.id, percentaje.toFixed(2));
+                                    }
+                                }
+                                Text {
+                                    Layout.preferredWidth: 50
+                                    Layout.rightMargin: 5
+                                    text: (modelData.audio.volume.toFixed(2) * 100).toFixed(0) + "%"
+                                    font.pixelSize: 16
+                                    font.family: "CaskaydiaCove Nerd Font"
+                                    color: "#252525"
+                                    verticalAlignment: Text.AlignVCenter
+                                    horizontalAlignment: Text.AlignHCenter
                                 }
                             }
+                           
                         }
                        
                     }
@@ -135,16 +152,31 @@ Rectangle {
                                     } 
                                 }
                             }
-                            
-                            Slide {
-                                id: sourceSlider
-                                height: 10
-                                width: parent.width - 20
-                                percentaje: modelData.audio.volume.toFixed(2)
-                                onPercentajeChanged: {
-                                    Services.Audio.setNodeVolume(modelData.id, percentaje.toFixed(2));
+                            RowLayout {
+                                width: parent.width
+                                spacing: 5
+                                Slide {
+                                    id: sourceSlider
+                                    Layout.preferredHeight: 10
+                                    Layout.fillWidth: true
+                                    percentaje: modelData.audio.volume.toFixed(2)
+                                    dynamic: true
+                                    onPercentajeChanged: {
+                                        Services.Audio.setNodeVolume(modelData.id, percentaje.toFixed(2));
+                                    }
                                 }
-                            }
+                                Text {
+                                    Layout.preferredWidth: 50
+                                    Layout.rightMargin: 5
+                                    text: (modelData.audio.volume.toFixed(2) * 100).toFixed(0) + "%"
+                                    font.pixelSize: 16
+                                    font.family: "CaskaydiaCove Nerd Font"
+                                    color: "#252525"
+                                    verticalAlignment: Text.AlignVCenter
+                                    horizontalAlignment: Text.AlignHCenter
+                                }
+                            } 
+                            
                         }
                        
                     }
