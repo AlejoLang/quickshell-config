@@ -48,7 +48,7 @@ Rectangle {
                             }
                         } else {
                             popup.changeContent(trayItemMenuContent);
-                            popup.visible = true;
+                            popup.open();
                         }
                     }
                 }

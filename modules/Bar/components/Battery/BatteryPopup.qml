@@ -125,7 +125,7 @@ Rectangle {
             spacing: 5
             Layout.fillWidth: true
             Text {
-                text: "Displays"
+                text: "Displays brightness"
                 font.pixelSize: 18
                 font.family: "CaskaydiaCove Nerd Font"
                 font.bold: true

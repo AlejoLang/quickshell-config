@@ -47,7 +47,7 @@ Rectangle {
                 }
             } else if (popup) {
                 popup.changeContent(root.batteryPopup);
-                popup.visible = true;
+                popup.open();
             }
         }
     }

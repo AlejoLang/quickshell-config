@@ -74,7 +74,7 @@ Rectangle {
                 }
             } else {
                 popup.changeContent(root.popComponent);
-                popup.visible = true;
+                popup.open()
             }
         }
         onWheel: (event) => {
