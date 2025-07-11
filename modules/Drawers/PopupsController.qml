@@ -33,7 +33,7 @@ MouseArea {
                 // If the mouse is over the popup or its content, do not close it
             } else {
                 // If the mouse is outside the popup and its content, hide the popup
-                barPopup.visible = false;
+                barPopup.close()
             }
         }
         event.accepted = true;
