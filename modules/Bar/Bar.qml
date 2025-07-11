@@ -10,6 +10,7 @@ import "components/Bluetooth"
 import "components/AudioManager"
 import "components/Battery"
 import "components/Multimedia"
+import "components/SystemTray"
 import "components"
 
 Item {
@@ -85,6 +86,10 @@ Item {
                 }
                 Battery {
                     id: battery
+                    anchors.verticalCenter: parent.verticalCenter
+                }
+                SystemTray {
+                    id: systemTray
                     anchors.verticalCenter: parent.verticalCenter
                 }
                 Bluetooth {
