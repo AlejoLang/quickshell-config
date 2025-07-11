@@ -33,6 +33,7 @@ Rectangle {
                 color: "#8a8a8a"
                 width: root.screen.width * root.scaleFactor
                 height: root.screen.height * root.scaleFactor
+                border.width: modelData.workspace.active ? 2 : 0
                 
                 Repeater {
                     model: parent.modelData.clients
@@ -74,6 +75,19 @@ Rectangle {
                 } 
                 
             }
+            
         }
     }
+    MouseArea {
+        anchors.fill: parent
+        acceptedButtons: Qt.MiddleButton
+        onWheel: (event) => {
+            if (event.angleDelta.y > 0 && Hyprland.focusedWorkspace.id < 10) {
+                Hyprland.dispatch(`workspace +1`);
+            } else if (event.angleDelta.y < 0 && Hyprland.focusedWorkspace.id > 1) {
+                Hyprland.dispatch(`workspace -1`);
+            }
+            event.accepted = false; // Prevent further propagation
+        }
+    } 
 }
