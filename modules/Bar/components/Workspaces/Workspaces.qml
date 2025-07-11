@@ -40,7 +40,6 @@ Rectangle {
         onClicked: (event) => {
             if (event.button === Qt.MiddleButton) {
                 root.popupVisible = !root.popupVisible; // Toggle popup visibility
-                console.log("Middle button clicked, popupVisible:", root.popupVisible);
             } 
             event.accepted = false
         }
@@ -48,13 +47,14 @@ Rectangle {
 
    PopupWindow {
         id: workspacesSpecialPopup
-        anchor.window: drawerWindow
-        anchor.rect.x: (root.screen.width/2) - (workspacesPopup.implicitWidth/2)
-        anchor.rect.y: (root.screen.height/2) - (workspacesPopup.implicitHeight/2)
+        anchor.window: drawerWindow 
+        anchor.rect.x: (root.screen.width/2) - (workspacesPopup.width/2)
+        anchor.rect.y: (root.screen.height/2) - (workspacesPopup.height/2)
         visible: root.popupVisible
         color: "transparent"
         implicitHeight: workspacesPopup.implicitHeight
         implicitWidth: workspacesPopup.implicitWidth
+        
         WorkspacesPopup {
             id: workspacesPopup
             screen: root.screen
@@ -67,7 +67,6 @@ Rectangle {
             windows: [workspacesSpecialPopup]
             onCleared: {
                 root.popupVisible = false; // Hide the popup when focus is cleared
-                console.log("Focus cleared from workspaces popup");
             }
         }
 }
