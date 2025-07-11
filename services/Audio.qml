@@ -10,24 +10,14 @@ import 'root:/utils/audioIcons.js' as AudioIcons
 
 Singleton {
     id: root
-    property list<PwNode> sinksList: [];
-    property list<PwNode> sourcesList: [];
+    property list<PwNode> sinksList: Pipewire.nodes.values.filter(node => (!node.isStream && node.isSink && node.audio));
+    property list<PwNode> sourcesList: Pipewire.nodes.values.filter(node => (!node.isStream && !node.isSink && node.audio));
     property PwNode currentSource: Pipewire.defaultAudioSource ?? null;
     property string currentSourceIcon: 'mic';
     property PwNode currentSink: Pipewire.defaultAudioSink ?? null;
     property string currentSinkIcon: 'speaker';
 
     function setup () {
-        const sinks = Pipewire.nodes.values.filter(node => (!node.isStream && node.isSink && node.audio));
-        const sources = Pipewire.nodes.values.filter(node => (!node.isStream && !node.isSink && node.audio));
-        root.sinksList = sinks 
-        root.sourcesList = sources
-        const aux = [...sinks, ...sources];
-        for (const node of aux) {
-            if(!tracker.objects.find(n => n.id === node.id)) {
-                tracker.objects.push(node);
-            }
-        }
         getSourceIconProcess.nodeId = root.currentSource ? root.currentSource.id : 0;
         getSourceIconProcess.running = true;
         getSinkIconProcess.nodeId = root.currentSink ? root.currentSink.id : 0;
@@ -114,13 +104,13 @@ Singleton {
     Process {
         id: switchAudioSinkProcess
         property int nodeId: 0 // Default to first sink
-        command: ["wpctl", "set-default", "node", nodeId]
+        command: ["wpctl", "set-default", nodeId]
         running: false
     } 
     Process {
         id: switchAudioSourceProcess
         property int nodeId: 0 // Default to first source
-        command: ["wpctl", "set-default", "source", nodeId]
+        command: ["wpctl", "set-default", nodeId]
         running: false
     }
     Process {
@@ -157,6 +147,6 @@ Singleton {
     }
     PwObjectTracker {
         id: tracker
-        objects: []
+        objects: [...root.sinksList, ...root.sourcesList]
     }
 }

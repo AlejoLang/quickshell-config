@@ -5,6 +5,7 @@ import "root:/utils/batteryIcons.js" as BatteryIcons
 
 
 Singleton {
+    id: root;
     property UPowerDevice battery: UPower.devices.values[0] || null
 
     function getBatteryPercentage() {
@@ -44,5 +45,22 @@ Singleton {
             return battery.timeToEmpty || 0;
         }
         return 0;
+    }
+
+    function getTime () {
+        if (root.battery.state === UPowerDeviceState.Charging) {
+            return root.getTimeToFull()
+        } else if (root.battery.state === UPowerDeviceState.Discharging) {
+            return root.getTimeToEmpty()
+        }
+        return 0;
+    }
+
+    function getBatteryRate() {
+        if (battery) {
+            const rate = battery.changeRate || 0;
+            return rate.toFixed(2)
+        }
+        return 0
     }
 }
