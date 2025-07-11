@@ -4,6 +4,7 @@ import QtQuick.Layouts
 import Quickshell
 import Quickshell.Widgets
 import "root:/services/"
+import "../../../general"
 
 Rectangle {
     id: root
@@ -50,11 +51,22 @@ Rectangle {
                             implicitSize: 32
                             anchors.centerIn: parent
                         } 
+                        
                         MouseArea {
                             anchors.fill: parent
                             onClicked: (event) => {
                                 Hyprland.dispatch(`focuswindow address:${parent.modelData.address}`);
                                 workspaces.popupVisible = false; // Hide the popup after focusing
+                                event.accepted = false;
+                            }
+                        }
+                        DefaultButton {
+                            text: "close"
+                            x: parent.width - 10 - width
+                            y: 10 
+                            visible: Math.min(parent.width - 10 - width, parent.height - 20) > 30
+                            onClicked: {
+                                Hyprland.dispatch(`closewindow address:${parent.modelData.address}`);
                                 event.accepted = false;
                             }
                         }

@@ -43,6 +43,15 @@ Rectangle {
             } 
             event.accepted = false
         }
+        onWheel: (event) => {
+            if (event.angleDelta.y > 0 && Hyprland.focusedWorkspace.id < 10) {
+                Hyprland.dispatch("workspace +1");
+            } else if (event.angleDelta.y < 0 && Hyprland.focusedWorkspace.id > 1) {
+                Hyprland.dispatch("workspace -1");
+            }
+            console.log(Hyprland.focusedWorkspace.id)
+            event.accepted = false; // Prevent further propagation
+        }
     }
 
    PopupWindow {

@@ -15,14 +15,13 @@ Button {
         font.pixelSize: 24
         anchors.verticalCenter: buttonBackground.verticalCenter
         anchors.horizontalCenter: buttonBackground.horizontalCenter
-        anchors.horizontalCenterOffset: 2
     }
 
     background: Rectangle {
         id: buttonBackground
         color: root.backgroundColor
-        implicitWidth: buttonBackground.height
-        implicitHeight: buttonText.height
+        width: parent.height
+        height: parent.height
         radius: buttonText.font.pixelSize / 2
         anchors.centerIn: parent
     }
