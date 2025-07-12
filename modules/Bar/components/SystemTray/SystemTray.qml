@@ -1,3 +1,4 @@
+pragma ComponentBehavior: Bound
 import QtQuick
 import QtQuick.Layouts
 import Quickshell.Services.SystemTray
@@ -5,6 +6,8 @@ import Quickshell
 import "../"
 
 Rectangle {
+    id: root
+    required property var bar
     color: "transparent"
     implicitWidth: childrenRect.width
     implicitHeight: childrenRect.height
@@ -58,6 +61,7 @@ Rectangle {
                     height: trayItemMenu.height
                     id: trayItemMenuContent
                     owner: trayItem 
+                    window: root.bar
                     SystemTrayPopup {
                         id: trayItemMenu
                         entries: trayItemMenuOpener.children.values

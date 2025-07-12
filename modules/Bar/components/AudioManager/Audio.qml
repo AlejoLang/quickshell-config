@@ -4,6 +4,7 @@ import "../"
 
 Rectangle {
     id: root
+    required property var bar
     implicitHeight: parent.height
     implicitWidth: audioRow.width
     color: "transparent"
@@ -57,6 +58,7 @@ Rectangle {
 
     property PopupContent popComponent: PopupContent {
         owner: root
+        window: root.bar
         id: audioPopup  
         width: audioPopupContent.width
         height: audioPopupContent.height

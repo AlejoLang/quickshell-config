@@ -49,10 +49,10 @@ Variants {
 
             Region {
                 id: barPopupR
-                x: popup.absX - 20
-                y: popup.absY - 20
-                width: popup.visible? popup.content.width + 40: 0
-                height: popup.visible ? popup.content.height + 40 : 0
+                x: popup.absX - 45
+                y: popup.absY - 45
+                width: popup.visible? popup.content.width + 90: 0
+                height: popup.visible ? popup.content.height + 90 : 0
                 intersection: Intersection.Subtract
             }
             PopupsController {

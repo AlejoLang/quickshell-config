@@ -83,13 +83,15 @@ Item {
                 Clock {
                     id: clock
                     anchors.verticalCenter: parent.verticalCenter
-                }
+                } 
                 Battery {
                     id: battery
+                    bar: root
                     anchors.verticalCenter: parent.verticalCenter
                 }
                 SystemTray {
                     id: systemTray
+                    bar: root
                     anchors.verticalCenter: parent.verticalCenter
                 }
                 Bluetooth {
@@ -102,6 +104,7 @@ Item {
                 }
                 Audio {
                     id: audioManager
+                    bar: root
                     anchors.verticalCenter: parent.verticalCenter
                 }
             }

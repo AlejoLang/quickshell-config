@@ -89,6 +89,7 @@ Rectangle {
 
     property PopupContent popComponent: PopupContent {
         width: multimediaPopup.width
+        window: root.bar
         height: multimediaPopup.height
         owner: root
         id: popRect

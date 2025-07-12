@@ -5,6 +5,7 @@ import "../"
 
 Rectangle {
     id: root
+    required property var bar
     implicitWidth: batteryRow.width
     implicitHeight: parent.implicitHeight
     color: "transparent"
@@ -55,6 +56,7 @@ Rectangle {
     property PopupContent batteryPopup: PopupContent {
         id: batteryPopup
         owner: root
+        window: root.bar
         width: batteryPopupContent.width
         height: batteryPopupContent.height
         BatteryPopup {

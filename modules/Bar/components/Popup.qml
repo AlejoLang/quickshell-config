@@ -1,7 +1,7 @@
 pragma ComponentBehavior: Bound
 import QtQuick
 import Quickshell
-import Quickshell.Hyprland
+import QtQuick.Effects
 
 Scope {
     property ShellScreen screen
@@ -13,6 +13,8 @@ Scope {
     property real absY
     
     property bool animating: false
+    property bool onLeft: false
+    property bool onRight: false
 
     id: root
     
@@ -115,7 +117,9 @@ Scope {
             closeAnimation.stop();
             root.animating = false;
         }
-        
+        root.onLeft = false;
+        root.onRight = false;
+
         if(root.content) {
             root.content.parent = null;
         }
@@ -124,12 +128,15 @@ Scope {
             root.content.parent = popupContent;
         }
         const locOw = window.itemPosition(root.content.owner);
-        root.content.posX = locOw.x + (root.content.owner.width / 2) - (root.content.children[0].implicitWidth / 2);
+        root.content.posX = locOw.x + (root.content.owner.width / 2) - ((root.content.children[0].implicitWidth+90) / 2);
         root.content.posY = locOw.y + root.content.owner.height;
-        if (root.content.posX < window.x + 10) {
-            root.content.posX = window.x + 10;
-        } else if (root.content.posX + root.content.children[0].implicitWidth > window.x + window.width - 10) {
-            root.content.posX = window.x + window.width - root.content.children[0].implicitWidth - 10;
+        if (root.content.posX < 16) {
+            root.onLeft = true;
+            root.content.posX =  8;
+        } else if (root.content.posX + root.content.children[0].implicitWidth > root.screen.width - 8) {
+            root.onRight = true;
+            root.content.posX = root.screen.width - root.content.children[0].implicitWidth - (45 + 8);
+            console.log(root.screen.width, root.content.children[0].implicitWidth, root.content.posX)
         }
         root.absX = locOw.x + (root.content.owner.width / 2) - (root.content.children[0].implicitWidth / 2);
         root.absY = locOw.y + root.content.owner.height;
@@ -142,23 +149,192 @@ Scope {
    
     PopupWindow {
         id: popupWindow
-        implicitHeight: popupContent.implicitHeight
-        implicitWidth: popupContent.implicitWidth
+        implicitHeight: popupContent.implicitHeight + 45
+        implicitWidth: popupContent.implicitWidth + (root.onLeft || root.onRight ? 45 : 90)
         anchor.window: root.window
         anchor.rect.x: root.content?.posX || 0
         anchor.rect.y: root.content?.posY || 0
         visible: root.visible
         color: "transparent"
         
-        Item {
+        Rectangle {
+            bottomLeftRadius: root.onLeft ? 0 : 10
+            bottomRightRadius: root.onRight ? 0 : 10
+            color: "#EFEFEF"
             implicitWidth: root?.content?.children[0]?.implicitWidth || 100
             implicitHeight: root?.content?.children[0]?.implicitHeight || 100
             id: popupContent
-            
+            anchors.margins: 0
+
             opacity: 0.0
             y: 0
             
+            states: [
+                State {
+                    name: "leftAligned"
+                    when: root.onLeft
+                    AnchorChanges {
+                        target: popupContent
+                        anchors.left: popupContent.parent.left
+                        anchors.right: undefined
+                        anchors.horizontalCenter: undefined
+                    }
+                    
+                },
+                State {
+                    name: "rightAligned"
+                    when: root.onRight && !root.onLeft
+                    AnchorChanges {
+                        target: popupContent
+                        anchors.left: undefined
+                        anchors.right: popupContent.parent.right
+                        anchors.horizontalCenter: undefined
+                    }
+                },
+                State {
+                    name: "centerAligned"
+                    when: !root.onLeft && !root.onRight
+                    AnchorChanges {
+                        target: popupContent
+                        anchors.left: undefined
+                        anchors.right: undefined
+                        anchors.horizontalCenter: popupContent.parent.horizontalCenter
+                    }
+                }
+            ]
         }
+        Item {
+            id: corners
+            anchors.bottom: popupContent.top
+            Item {
+                id: topLeftCorner
+                visible: !root.onLeft
+                x: 0
+                y: 0
+                width: 45
+                height: 45
+                Rectangle {
+                    width: parent.width
+                    height: parent.height
+                    color: "#EFEFEF"
+                    layer.enabled: true
+                    visible: true
+                    layer.effect: MultiEffect {
+                        maskSource: leftPopupMask
+                        maskEnabled: true
+                        maskInverted: true 
+                    }
+                }
+                Rectangle {
+                    id: leftPopupMask
+                    width: parent.width
+                    height: parent.height
+                    color: "white"
+                    visible: false
+                    topRightRadius: parent.width / 2
+                    layer.enabled: true
+                }
+            }
+            Item {
+                id: topRightCorner
+                visible: !root.onRight
+                x: popupWindow.implicitWidth - 45
+                y: 0
+                width: 45
+                height: 45
+                Rectangle {
+                    width: parent.width
+                    height: parent.height
+                    color: "#EFEFEF"
+                    layer.enabled: true
+                    visible: true
+                    layer.effect: MultiEffect {
+                        maskSource: rightPopupMask
+                        maskEnabled: true
+                        maskInverted: true 
+                    }
+                }
+                Rectangle {
+                    id: rightPopupMask
+                    width: parent.width
+                    height: parent.height
+                    color: "white"
+                    visible: false
+                    topLeftRadius: parent.width / 2
+                    layer.enabled: true
+                }
+            }
+            Item {
+                id: bottomLeftCorner
+                visible: root.onLeft
+                x: 0
+                y: popupWindow.implicitHeight - 45
+                width: 45
+                height: 45
+                Rectangle {
+                    width: parent.width
+                    height: parent.height
+                    color: "#EFEFEF"
+                    layer.enabled: true
+                    visible: true
+                    layer.effect: MultiEffect {
+                        maskSource: bottomLeftCornerMask
+                        maskEnabled: true
+                        maskInverted: true 
+                    }
+                }
+                Rectangle {
+                    id: bottomLeftCornerMask
+                    width: parent.width
+                    height: parent.height
+                    color: "white"
+                    visible: false
+                    topLeftRadius: parent.width / 2
+                    layer.enabled: true
+                }
+            }
+            Item {
+                id: bottomRightCorner
+                visible: root.onRight
+                x: popupWindow.implicitWidth - 45
+                y: popupWindow.implicitHeight - 45
+                width: 45
+                height: 45
+                Rectangle {
+                    width: parent.width
+                    height: parent.height
+                    color: "#EFEFEF"
+                    layer.enabled: true
+                    visible: true
+                    layer.effect: MultiEffect {
+                        maskSource: bottomRightCornerMask
+                        maskEnabled: true
+                        maskInverted: true 
+                    }
+                }
+                Rectangle {
+                    id: bottomRightCornerMask
+                    width: parent.width
+                    height: parent.height
+                    color: "white"
+                    visible: false
+                    topRightRadius: parent.width / 2
+                    layer.enabled: true
+                }
+            }
+            
+        }
+        
+        Region {
+            id: backgroundRegion
+            x: 0
+            y: 0
+            width: popupWindow.implicitWidth
+            height: popupWindow.implicitHeight
+            intersection: Intersection.Xor
+            regions: [corners]
+            
+        } 
         
     }
 }
