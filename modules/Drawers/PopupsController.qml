@@ -7,6 +7,7 @@ MouseArea {
     property ShellScreen screen
     property PanelWindow window
     property Popup barPopup
+    property var osd
     
     width: screen.width
     height: screen.height
@@ -29,12 +30,20 @@ MouseArea {
             const relative = window.itemPosition(barPopup.content.owner);
             const relativeRect = Qt.rect(relative.x, relative.y, barPopup.content.owner.width, barPopup.content.owner.height);
             if (barPopup.contains(event) || root.contains(relativeRect, event)) {
-                // If the mouse is over the popup or its content, do not close it
+
             } else {
                 // If the mouse is outside the popup and its content, hide the popup
                 barPopup.close()
             }
         }
+
+        if(osd) {
+            if(Math.abs(event.y - window.height/2) < ((osd.height - 90) / 2) && event.x > screen.width - 8) {
+                osd.open();
+            } else if (osd.visible) {
+                osd.close();
+            }
+        } 
         event.accepted = true;
     }
 }

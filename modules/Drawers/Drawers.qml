@@ -4,6 +4,7 @@ import Quickshell.Hyprland
 import QtQuick
 import "../Bar"
 import "../Bar/components"
+import "../Osd"
 
 Variants {
     model: Quickshell.screens
@@ -42,8 +43,16 @@ Variants {
                 id: barPopupR
                 x: popup.absX - 100 ?? 0
                 y: popup.absY - 100 ?? 0
-                width: popup.content.width + 200 ?? 0
-                height: popup.content.height + 200 ?? 0
+                width: popup.content?.width + 200 ?? 0
+                height: popup.content?.height + 200 ?? 0
+                intersection: Intersection.Subtract
+            }
+            Region {
+                id: osdR
+                x: osd.relativeX - 100 ?? 0
+                y: osd.relativeY - 100 ?? 0
+                width: osd.width + 200 ?? 0
+                height: osd.height + 200 ?? 0
                 intersection: Intersection.Subtract
             }
 
@@ -53,12 +62,14 @@ Variants {
                 width: drawerWindow.width - 16
                 height: drawerWindow.height - bar.height - 8
                 intersection: Intersection.Subtract
-                regions: [popup.visible ? barPopupR : null]
+                regions: [popup.visible ? barPopupR : null, 
+                          osd.visible ? osdR : null]
             }
 
             PopupsController {
                 id: popupsController
                 barPopup: popup
+                osd: osd
                 screen: drawerScope.modelData
                 window: drawerWindow
                 propagateComposedEvents: true
@@ -70,21 +81,16 @@ Variants {
                 screen: drawerScope.modelData
             }
             Popup {
-                id: hoverPopup
-                window: drawerWindow
-                screen: drawerScope.modelData
-                content: drawerWindow.hoverPopup
-                visible: false
-                isHoverPopup: true
-            }
-            Popup {
                 id: popup
                 window: drawerWindow
                 screen: drawerScope.modelData
                 content: drawerWindow.popup
                 visible: false
-                isHoverPopup: false
-                popupController: popupsController
+            }
+            Osd {
+                id: osd
+                screen: drawerScope.modelData
+                window: drawerWindow
             }
         }
     } 
