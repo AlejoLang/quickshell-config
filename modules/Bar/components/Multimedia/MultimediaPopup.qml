@@ -61,8 +61,7 @@ Rectangle {
         width: parent.width
         ColumnLayout {
             spacing: 5
-            anchors.horizontalCenter: parent.horizontalCenter
-            width: parent.width - 20
+            Layout.fillWidth: true
             Text {
                 text: (root.currentPlayer.trackTitle) || "No track playing"
                 Layout.fillWidth: true
@@ -90,7 +89,7 @@ Rectangle {
         }
         Row {
             spacing: 10
-            anchors.horizontalCenter: parent.horizontalCenter
+            Layout.alignment: Qt.AlignHCenter
             DefaultButton {
                 text: "keyboard_arrow_left"
                 backgroundColor: "#252525"
@@ -120,9 +119,10 @@ Rectangle {
             }
         }
         Item {
-            anchors.horizontalCenter: parent.horizontalCenter
-            height: 20
-            width: parent.width
+            Layout.fillWidth: true
+            Layout.maximumHeight: 10
+            Layout.preferredHeight: 10
+            Layout.bottomMargin: 15
             Item {
                 property var posAux: null;
                 width: parent.width - 20
