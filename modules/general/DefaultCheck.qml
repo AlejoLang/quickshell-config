@@ -5,7 +5,6 @@ CheckBox {
     id: root
     checked: false
     onCheckedChanged: {
-        console.log("Checked:", root.checked);
         if (root.checked) {
             root.indicator.x = root.width - root.indicator.width - 3;
         } else {

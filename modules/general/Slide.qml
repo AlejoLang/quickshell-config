@@ -6,6 +6,7 @@ Rectangle {
     property real livePercentage: percentage // Used for dynamic updates
     property var posAux: null
     property bool dynamic: false // If true, the percentage will be updated dynamically based on mouse position. If false, the percentage will change only on mouse release
+    color: "transparent"
 
     function getPercentage() {
         return percentage;
@@ -20,13 +21,18 @@ Rectangle {
     }
 
     Rectangle {
-        anchors.fill: parent
+        id: bar
+        height: parent.height
+        width: parent.width
+        anchors.verticalCenter: parent.verticalCenter
         radius: 5
         color: "#b3b3b3"
     }
     Rectangle {
+        id: progressBar
         width: root.dynamic ? ((parent.percentage ?? 0) * parent.width) : (root.posAux ?? ((root.percentage ?? 0) * parent.width))
         height: parent.height
+        anchors.verticalCenter: parent.verticalCenter
         radius: 5
         color: "#252525"
     }    
