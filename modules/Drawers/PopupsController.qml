@@ -24,7 +24,6 @@ MouseArea {
         }
         return false;
     }
-
     onPositionChanged: (event) => {
         if (barPopup && barPopup.visible) {
             const relative = window.itemPosition(barPopup.content.owner);

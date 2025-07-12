@@ -38,27 +38,30 @@ Variants {
                 bar: bar
             }
 
-            mask: Region {
-                x: 10
-                y: bar.implicitHeight
-                width: drawerWindow.width - 20
-                height: drawerWindow.height - bar.implicitHeight - 10
-                intersection: Intersection.Xor
-                regions: [barPopupR]
-            }
-
             Region {
                 id: barPopupR
-                x: popup.absX - 45
-                y: popup.absY - 45
-                width: popup.visible? popup.content.width + 90: 0
-                height: popup.visible ? popup.content.height + 90 : 0
+                x: popup.absX - 100 ?? 0
+                y: popup.absY - 100 ?? 0
+                width: popup.content.width + 200 ?? 0
+                height: popup.content.height + 200 ?? 0
                 intersection: Intersection.Subtract
             }
+
+            mask: Region {
+                x: 8
+                y: bar.height
+                width: drawerWindow.width - 16
+                height: drawerWindow.height - bar.height - 8
+                intersection: Intersection.Subtract
+                regions: [popup.visible ? barPopupR : null]
+            }
+
             PopupsController {
+                id: popupsController
                 barPopup: popup
                 screen: drawerScope.modelData
                 window: drawerWindow
+                propagateComposedEvents: true
             }
 
             Bar{
@@ -81,6 +84,7 @@ Variants {
                 content: drawerWindow.popup
                 visible: false
                 isHoverPopup: false
+                popupController: popupsController
             }
         }
     } 

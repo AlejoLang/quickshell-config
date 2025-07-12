@@ -18,6 +18,8 @@ Scope {
 
     id: root
     
+    property var popupController: null  // Reference to the popup controller
+
     function open() {
         if (!root.animating) {
             closeAnimation.stop();
@@ -84,15 +86,16 @@ Scope {
                 target: popupContent
                 property: "opacity"
                 to: 0.0
-                duration: 150
+                duration: 200
                 easing.type: Easing.InCubic
             }
             
             PropertyAnimation {
                 target: popupContent
                 property: "y"
+                from: 0
                 to: -popupContent.implicitHeight
-                duration: 150
+                duration: 200
                 easing.type: Easing.InCubic
             }
         }
@@ -205,7 +208,9 @@ Scope {
         }
         Item {
             id: corners
-            anchors.bottom: popupContent.top
+            width: popupWindow.implicitWidth
+            height: popupWindow.implicitHeight
+            anchors.top: popupContent.top
             Item {
                 id: topLeftCorner
                 visible: !root.onLeft
@@ -325,16 +330,14 @@ Scope {
             
         }
         
+        mask: root.visible ? backgroundRegion : null
         Region {
             id: backgroundRegion
-            x: 0
-            y: 0
-            width: popupWindow.implicitWidth
-            height: popupWindow.implicitHeight
-            intersection: Intersection.Xor
-            regions: [corners]
-            
-        } 
-        
+            x: popupContent.x
+            y: popupContent.y
+            width: popupContent.implicitWidth
+            height: popupContent.implicitHeight
+            intersection: Intersection.Intersect
+        }
     }
 }
