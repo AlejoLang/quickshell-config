@@ -48,7 +48,7 @@ Rectangle {
                             width: parent.width 
                             RowLayout {
                                 spacing: 5
-                                width: parent.width
+                                width: parent.width - 10
                                 Text {
                                     text: modelData.description
                                     Layout.fillWidth: true
@@ -57,17 +57,15 @@ Rectangle {
                                     font.pixelSize: 18
                                     font.family: "CaskaydiaCove Nerd Font"
                                 }
-                                Text {
-                                    text: modelData?.id == Services.Audio?.currentSink?.id ? "check_box" : "check_box_outline_blank"
-                                    Layout.preferredWidth: 30
-                                    font.pixelSize: 18
-                                    font.family: "Material Symbols Rounded"
-                                    MouseArea {
-                                        anchors.fill: parent
-                                        onClicked: {
+                                DefaultCheckBox {
+                                    Layout.preferredWidth: 20
+                                    Layout.preferredHeight: 20
+                                    checked: modelData?.id == Services.Audio?.currentSink?.id
+                                    onCheckedChanged: {
+                                        if (checked) {
                                             Services.Audio.switchAudioSink(modelData.id);
                                         }
-                                    } 
+                                    }
                                 }
                             }
                             RowLayout {
@@ -130,7 +128,7 @@ Rectangle {
                             width: parent.width 
                             RowLayout {
                                 spacing: 5
-                                width: parent.width
+                                width: parent.width - 10
                                 Text {
                                     text: modelData.description
                                     Layout.fillWidth: true
@@ -139,18 +137,16 @@ Rectangle {
                                     font.pixelSize: 18
                                     font.family: "CaskaydiaCove Nerd Font"
                                 }
-                                Text {
-                                    text: modelData.id == Services.Audio.currentSource.id ? "check_box" : "check_box_outline_blank"
-                                    Layout.preferredWidth: 30
-                                    font.pixelSize: 18
-                                    font.family: "Material Symbols Rounded"
-                                    MouseArea {
-                                        anchors.fill: parent
-                                        onClicked: {
+                                DefaultCheckBox {
+                                    Layout.preferredWidth: 20
+                                    Layout.preferredHeight: 20
+                                    checked: modelData?.id == Services.Audio?.currentSource?.id
+                                    onCheckedChanged: {
+                                        if (checked) {
                                             Services.Audio.switchAudioSource(modelData.id);
                                         }
-                                    } 
-                                }
+                                    }
+                                } 
                             }
                             RowLayout {
                                 width: parent.width
