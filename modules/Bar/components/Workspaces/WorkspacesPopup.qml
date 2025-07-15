@@ -3,13 +3,15 @@ import QtQuick
 import QtQuick.Layouts
 import Quickshell
 import Quickshell.Widgets
-import "root:/services/"
+import Quickshell.Wayland
+import Quickshell.Hyprland
+import "root:/services/" as Services
 import "../../../general"
 
 Rectangle {
     id: root
     property ShellScreen screen
-    property real scaleFactor: (clamp((screen.width - 400)/Hyprland.workspacesClients.length, 100, 400)/screen.width).toFixed(2);
+    property real scaleFactor: (clamp((screen.width - 400)/Services.Hyprland.workspacesTopLevels.length, 100, 400)/screen.width).toFixed(2);
     color: "#EFEFEF"
     implicitHeight: workspacesRowLayout.height + 20
     implicitWidth: workspacesRowLayout.width + 20
@@ -25,7 +27,7 @@ Rectangle {
         anchors.horizontalCenter: parent.horizontalCenter
         spacing: 10
         Repeater {
-            model: Hyprland.workspacesClients
+            model: Services.Hyprland.workspacesTopLevels
             Rectangle {
                 required property var modelData
                 radius: 5
@@ -36,7 +38,7 @@ Rectangle {
                 border.width: modelData.workspace.active ? 2 : 0
                 
                 Repeater {
-                    model: parent.modelData.clients
+                    model: parent.modelData.topLevels
                     Rectangle {
                         required property var modelData
                         color: "#566caa"
@@ -47,19 +49,27 @@ Rectangle {
                         width: modelData.width * root.scaleFactor
                         height: modelData.height * root.scaleFactor
 
+                        ScreencopyView {
+                            captureSource: parent.modelData.wayland
+                            anchors.fill: parent
+                            live: false
+                            Timer {
+                                interval: 10000
+                                running: true
+                                repeat: true
+                                onTriggered: {
+                                    parent.captureFrame();
+                                }
+                            }
+                        } 
+
                         border.width: 2;
                         border.color: "#5e5e5e"
-                        
-                        IconImage {
-                            source: Quickshell.iconPath(DesktopEntries.applications.values.find(entry => entry.id.toLowerCase() === modelData.initialClass.toLowerCase())?.icon || "unknown")
-                            implicitSize: 32
-                            anchors.centerIn: parent
-                        } 
                         
                         MouseArea {
                             anchors.fill: parent
                             onClicked: (event) => {
-                                Hyprland.dispatch(`focuswindow address:${parent.modelData.address}`);
+                                Services.Hyprland.dispatch(`focuswindow address:${parent.modelData.address}`);
                                 workspaces.popupVisible = false; // Hide the popup after focusing
                                 event.accepted = false;
                             }
@@ -71,7 +81,7 @@ Rectangle {
                             y: 10 
                             visible: Math.min(parent.width - 10 - width, parent.height - 20) > 30
                             onClicked: {
-                                Hyprland.dispatch(`closewindow address:${parent.modelData.address}`);
+                                Services.Hyprland.dispatch(`closewindow address:${parent.modelData.address}`);
                                 event.accepted = false;
                             }
                         }

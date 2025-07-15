@@ -12,12 +12,13 @@ Singleton {
     readonly property var workspaces: Hyprland.workspaces
     readonly property var monitors: Hyprland.monitors
     readonly property HyprlandToplevel activeToplevel: Hyprland.activeToplevel
+    readonly property list<HyprlandToplevel> topLevels: Hyprland.toplevels.values
     readonly property HyprlandWorkspace focusedWorkspace: Hyprland.focusedWorkspace
     readonly property HyprlandMonitor focusedMonitor: Hyprland.focusedMonitor
     readonly property int activeWsId: focusedWorkspace?.id ?? 1
     property list<Client> clients
     property DesktopEntry activeClient: null
-    property list<WorkspaceClients> workspacesClients
+    property list<WorkspaceClients> workspacesTopLevels
 
     function dispatch(request: string): void {
         Hyprland.dispatch(request);
@@ -31,18 +32,27 @@ Singleton {
     function getClientsByWorkspace() {
         const aux = [];
         for (const workspace of root.workspaces.values) {
-            const clients = root.clients.filter(c => {
+            const topLevel = root.topLevels.filter(c => {
                 return c.workspace.id === workspace.id;
             });
-            if (clients.length > 0) {
+            const customTopLevel = topLevel.map(tl => {
+                return customHyprlandTopLevelComp.createObject(root, {
+                    lastIpcObject: tl,
+                    width: root.clients.find(c => c.address === tl.address)?.width || 0,
+                    height: root.clients.find(c => c.address === tl.address)?.height || 0,
+                    y: root.clients.find(c => c.address === tl.address)?.y || 0,
+                    x: root.clients.find(c => c.address === tl.address)?.x || 0
+                });
+            });
+            if (customTopLevel.length > 0) {
                 const workspaceClients = workspaceClientsComp.createObject(root, {
                     workspace: workspace,
-                    clients: clients
+                    topLevels: customTopLevel
                 });
                 aux.push(workspaceClients);
             }
         }
-        root.workspacesClients = aux;
+        root.workspacesTopLevels = aux;
     }
 
     Timer {
@@ -86,6 +96,7 @@ Singleton {
                 const jsonData = JSON.parse(text);
                 const aux = []
                 for(const client of jsonData) {
+                    client.address = client.address.replace("0x", "")
                     const newClient = clientComp.createObject(root, {
                         lastIpcObject: client
                     });
@@ -134,9 +145,20 @@ Singleton {
         readonly property int focusHistoryId: lastIpcObject.focusHistoryID
     }
 
+    component CustomHyprlandTopLevel: QtObject {
+        required property var lastIpcObject
+        readonly property string address: lastIpcObject.address
+        readonly property string title: lastIpcObject.title
+        readonly property var wayland: lastIpcObject.wayland
+        property var width
+        property var height
+        property var x
+        property var y
+    }
+
     component WorkspaceClients: QtObject {
         property HyprlandWorkspace workspace
-        property list<Client> clients
+        property list<CustomHyprlandTopLevel> topLevels
     }
 
     Component {
@@ -148,5 +170,9 @@ Singleton {
         WorkspaceClients {
             
         }
+    }
+    Component {
+        id: customHyprlandTopLevelComp
+        CustomHyprlandTopLevel {}
     }
 }
