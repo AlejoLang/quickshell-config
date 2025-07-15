@@ -1,7 +1,7 @@
 import QtQuick
 import QtQuick.Layouts
 import "root:/services/" as Services
-import "root:/modules/general/"
+import "../../../general/"
 import Quickshell.Services.UPower
 
 Rectangle {
@@ -82,7 +82,7 @@ Rectangle {
                     Layout.preferredHeight: 20
                     onCheckedChanged: {
                         if (hyprsunsetSwitch.checked) {
-                            Services.Hyprland.dispatch(`exec hyprctl hyprsunset temperature ${Math.round(hyprsunsetSlider.percentage * 10000)}`);
+                            Services.Hyprland.dispatch(`exec hyprctl hyprsunset temperature ${Math.round(hyprsunsetSlider.value)}`);
                         } else {
                             Services.Hyprland.dispatch(`exec hyprctl hyprsunset temperature 6000`);
                         }
@@ -92,22 +92,25 @@ Rectangle {
             RowLayout {
                 spacing: 5
                 Layout.fillWidth: true
-                Slide {
+                DefaultSlide {
                     id: hyprsunsetSlider
                     Layout.fillWidth: true
                     Layout.preferredHeight: 10
-                    percentage: (6000/10000)
-                    dynamic: false
-                    onPercentageChanged: {
+                    from: 1000
+                    to: 16000
+                    stepSize: 10
+                    value: 6000
+                    live: false
+                    onValueChanged: {
                         if (hyprsunsetSwitch.checked) {
-                            Services.Hyprland.dispatch(`exec hyprctl hyprsunset temperature ${Math.round(hyprsunsetSlider.percentage * 10000)}`);
+                            Services.Hyprland.dispatch(`exec hyprctl hyprsunset temperature ${Math.round(hyprsunsetSlider.value)}`);
                         }
                     }
                 }
                 Text {
                     Layout.preferredWidth: 50
                     Layout.rightMargin: 5
-                    text: Math.round(hyprsunsetSlider.getLivePercentage() * 10000) + "K"
+                    text: Math.round((hyprsunsetSlider.visualPosition.toFixed(5) * 15000) + 1000) + "K"
                     font.pixelSize: 16
                     font.family: "CaskaydiaCove Nerd Font"
                     color: "#252525"
@@ -154,20 +157,22 @@ Rectangle {
                         }
                         RowLayout {
                             Layout.fillWidth: true
-                            Slide {
+                            DefaultSlide {
                                 id: brightnessSlider
                                 Layout.fillWidth: true
                                 Layout.preferredHeight: 10
-                                percentage: (modelData.currentBrightness / modelData.maxBrightness)
-                                dynamic: true
-                                onPercentageChanged: {
-                                    Services.Display.setBrightness(modelData, brightnessSlider.percentage);
+                                from: 0
+                                to: 1
+                                stepSize: 0.01
+                                value: (modelData.currentBrightness / modelData.maxBrightness)
+                                onValueChanged: {
+                                    Services.Display.setBrightness(modelData, brightnessSlider.value);
                                 }
                             }
                             Text {
                                 Layout.preferredWidth: 50
                                 Layout.rightMargin: 5
-                                text: Math.round(brightnessSlider.getLivePercentage() * 100) + "%"
+                                text: Math.round(brightnessSlider.value * 100) + "%"
                                 font.pixelSize: 16
                                 font.family: "CaskaydiaCove Nerd Font"
                                 color: "#252525"
