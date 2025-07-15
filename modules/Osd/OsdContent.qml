@@ -3,6 +3,7 @@ import QtQuick.Layouts
 import Quickshell.Services.Pipewire
 import "root:/services" as Services
 import QtQuick.Controls
+import "../general/"
 
 RowLayout {
     id: root
@@ -35,16 +36,15 @@ RowLayout {
             value: root.currentSource?.audio.volume || 0
             onValueChanged: {
                 if (root.currentSource) {
-                    console.log("Setting volume to:", value);
                     Services.Audio.setNodeVolume(root.currentSource.id, value);
                 }
             }
             Text {
                 text: (Services.Audio.currentSource.audio.volume.toFixed(2) * 100).toFixed(0)
-                font.pixelSize: 26
+                font.pixelSize: 18
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.bottom: parent.bottom
-                anchors.bottomMargin: 10
+                anchors.bottomMargin: 4
                 font.bold: true
             }
         } 
@@ -78,10 +78,10 @@ RowLayout {
             }
             Text {
                 text: (Services.Audio.currentSink.audio.volume.toFixed(2) * 100).toFixed(0)
-                font.pixelSize: 26
+                font.pixelSize: 18
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.bottom: parent.bottom
-                anchors.bottomMargin: 10
+                anchors.bottomMargin: 4
                 font.bold: true
             }
         } 

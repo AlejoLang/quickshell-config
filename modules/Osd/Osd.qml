@@ -44,21 +44,25 @@ PopupWindow {
 
     Connections{
         target: Services.Audio.currentSink.audio
-        function onVolumeChanged() {
+        onVolumeChanged: {
             if (!root.visible) {
                 root.open()
+                hideTimer.stop()
+                hideTimer.restart();
+                hideTimer.start()
             }
-            hideTimer.restart();
         }
     }
 
     Connections{
         target: Services.Audio.currentSource.audio
-        function onVolumeChanged() {
+        onVolumeChanged: {
             if (!root.visible) {
                 root.open()
+                hideTimer.stop()
+                hideTimer.restart();
+                hideTimer.start()
             }
-            hideTimer.restart();
         }
     }
 
@@ -132,7 +136,7 @@ PopupWindow {
 
     Rectangle {
         id: content
-        width: 150
+        width: 100
         height: 400
         color: "#EFEFEF"
         anchors.verticalCenter: parent.verticalCenter
