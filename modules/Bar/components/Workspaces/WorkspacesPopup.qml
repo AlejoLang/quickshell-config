@@ -30,7 +30,7 @@ Rectangle {
                 required property var modelData
                 radius: 5
                 
-                color: "#8a8a8a"
+                color: "#d1d1d1"
                 width: root.screen.width * root.scaleFactor
                 height: root.screen.height * root.scaleFactor
                 border.width: modelData.workspace.active ? 2 : 0
@@ -46,6 +46,9 @@ Rectangle {
                         y: modelData.y * root.scaleFactor
                         width: modelData.width * root.scaleFactor
                         height: modelData.height * root.scaleFactor
+
+                        border.width: 2;
+                        border.color: "#5e5e5e"
                         
                         IconImage {
                             source: Quickshell.iconPath(DesktopEntries.applications.values.find(entry => entry.id.toLowerCase() === modelData.initialClass.toLowerCase())?.icon || "unknown")
@@ -63,6 +66,7 @@ Rectangle {
                         }
                         DefaultButton {
                             text: "close"
+                            backgroundColor: "#252525"
                             x: parent.width - 10 - width
                             y: 10 
                             visible: Math.min(parent.width - 10 - width, parent.height - 20) > 30

@@ -1,35 +1,42 @@
 import QtQuick
 import Quickshell
 import Quickshell.Hyprland
-import "root:/services/"
+import "root:/services/" as Services
 
 Rectangle {
     id: root
     property ShellScreen screen
     property bool popupVisible: false
-    implicitHeight: workspacesRow.implicitHeight
+    height: parent.height
     implicitWidth: workspacesRow.implicitWidth
     color: "transparent"
     Row {
         id: workspacesRow
+        height: parent.height
+        width: childrenRect.width
         spacing: 5
+        anchors.verticalCenter: parent.verticalCenter
         Repeater {
-            model: Hyprland.workspaces // Directly use the workspaces model
-            Text {
-                text: {modelData.active ? "radio_button_checked" : "radio_button_unchecked"}
+            model: Services.Hyprland.workspaces // Directly use the workspaces model
+            Rectangle {
+                required property var modelData;
+                height: 15;
+                width: modelData.active ? 2 * (height) : height;
+                color: modelData.active ? "#252525" : "#a3a3a3"
+                radius: height / 2;
                 anchors.verticalCenter: parent.verticalCenter
-                font.pixelSize: 20
-                font.family: "Material Symbols Rounded"
-                color: "#252525"
+
                 MouseArea {
-                    propagateComposedEvents: true
                     anchors.fill: parent
                     onClicked: (event) => {
-                        modelData.activate()    
-                        event.accepted = false
+                        if (event.button === Qt.LeftButton) {
+                            Services.Hyprland.dispatch("workspace " + parent.modelData.id);
+                        } 
+                        event.accepted = true;
                     }
                 }
-            } 
+            }
+            
         }
     }
 
