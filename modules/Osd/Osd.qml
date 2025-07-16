@@ -82,20 +82,13 @@ PopupWindow {
         id: openAnimation
      
         ParallelAnimation {
-            PropertyAnimation {
-                target: content
-                property: "opacity"
-                from: 0.5
-                to: 1
-                duration: 200
-                easing.type: Easing.OutCubic
-            }
+           
             PropertyAnimation {
                 target: content
                 property: "x"
-                from: content.width 
+                from: content.width + 45 
                 to: 45     
-                duration: 200
+                duration: 300
                 easing.type: Easing.OutCubic
             }
         }
@@ -109,28 +102,19 @@ PopupWindow {
         id: closeAnimation
         
         ParallelAnimation {
-            PropertyAnimation {
-                target: content
-                property: "opacity"
-                to: 0.5
-                duration: 200
-                easing.type: Easing.InCubic
-            }
+            
             PropertyAnimation {
                 target: content
                 property: "x"
-                to: content.width
-                duration: 200
-                easing.type: Easing.InCubic
+                to: content.width + 45
+                duration: 300
+                easing.type: Easing.OutCubic
             }
         }
         
         onFinished: {
             root.visible = false;
             root.animating = false;
-            // Resetear posición para la próxima apertura
-            
-            content.opacity = 0;
         }
     }
 
