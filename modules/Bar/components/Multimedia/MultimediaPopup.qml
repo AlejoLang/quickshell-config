@@ -4,6 +4,7 @@ import QtQuick.Effects
 import QtQuick.Layouts
 import "../../../general" 
 import "root:/services/" as Services
+import Quickshell.Services.Mpris
 
 Rectangle {
     id: root
@@ -98,7 +99,11 @@ Rectangle {
                 background_color: "#252525"
                 onClicked: {
                     if (Services.Media.currentPlayer) {
-                        Services.Media.currentPlayer.togglePlaying();
+                        if (Services.Media.currentPlayer.isPlaying) {
+                            Services.Media.currentPlayer.pause();
+                        } else {
+                            Services.Media.currentPlayer.play();
+                        }
                     }
                 }
             }
@@ -113,10 +118,10 @@ Rectangle {
         ColumnLayout {
             Layout.fillWidth: true
             Layout.preferredHeight: 10
-            Layout.bottomMargin: 15
+            Layout.bottomMargin: 10
             Text {
                 text: Services.Media.currentPlayer?.position ? 
-                    Services.Media.getPlayerPosAsTime(seekSlider.position * (seekSlider.to - seekSlider.from) + seekSlider.from) + " / " + 
+                    Services.Media.getPlayerPosAsTime(Services.Media.currentPlayer.position) + " / " + 
                     Services.Media.getPlayerLengthAsTime(Services.Media.currentPlayer.length) : "0 / 0"
                 font.pixelSize: 16
                 font.family: "CaskaydiaCove Nerd Font"
@@ -133,7 +138,9 @@ Rectangle {
                 stepSize: 1
                 live: false
                 onValueChanged: {
-                    if (Services.Media.currentPlayer) {
+                    console.log(Services.Media.currentPlayer.position,  value);
+                    if (Services.Media.currentPlayer && Math.abs(Services.Media.currentPlayer.position - value) > 1) {
+                        console.log("Seeking to", value);
                         Services.Media.setPlayerPosition(Services.Media.currentPlayer, value);
                     }
                 }
@@ -141,7 +148,14 @@ Rectangle {
         }
     }
     FrameAnimation {
-        running: Services.Media.currentPlayer?.playbackState == MprisPlaybackState.Playing
-        onTriggered: Services.Media.currentPlayer?.positionChanged()
+        property int frameCount: 0
+        running: Services.Media.currentPlayer?.playbackState === MprisPlaybackState.Playing
+        onTriggered: {
+            frameCount++;
+            if (frameCount >= 60) {
+                frameCount = 0;
+                Services.Media.currentPlayer?.positionChanged();
+            }
+        }
     }
 }
