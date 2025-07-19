@@ -16,11 +16,6 @@ Slider {
         width: 0
         height: 0
     }
-    onPositionChanged: {
-        console.log("Slider position changed:", position);
-        console.log(width * position);
-        console.log(height * position);
-    }
     
     background: Rectangle {
         color: "#222"
