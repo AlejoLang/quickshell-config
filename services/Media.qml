@@ -54,7 +54,7 @@ Singleton {
     }
 
     function setPlayerPosition(player, newPosition) {
-        if (!player || !newPosition || isNaN(newPosition)) {
+        if (!player || newPosition === undefined || isNaN(newPosition)) {
             console.warn("Invalid player or position provided to setPlayerPosition:", player, newPosition);
             return;
         }
