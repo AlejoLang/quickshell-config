@@ -8,7 +8,7 @@ import Quickshell.Services.Mpris
 
 Rectangle {
     id: root
-    implicitHeight: 200
+    implicitHeight: 220
     implicitWidth: 600
     color: "#EFEFEF"
     bottomLeftRadius: 10
@@ -131,12 +131,37 @@ Rectangle {
                 id: seekSlider
                 Layout.fillWidth: true
                 Layout.margins: 10
-                Layout.preferredHeight: 10
+                Layout.preferredHeight: 20
                 from: 0
                 to: Services.Media.currentPlayer?.length || 100
                 value: Services.Media.currentPlayer?.position || 0
                 stepSize: 1
                 live: false
+                handle: Rectangle {
+                    x: seekSlider.position * (seekSlider.width - width)
+                    anchors.verticalCenter: parent.verticalCenter
+                    width: parent.height 
+                    height: parent.height
+                    radius: 5
+                    color: "#016b9c"
+                }
+                background: Rectangle {
+                    anchors.verticalCenter: parent.verticalCenter
+                    color: "#222"
+                    radius: 5
+                    width: parent.width
+                    height: parent.height - 4
+                    clip: true
+                    Rectangle {
+                        color: "#237dc7"
+                        anchors.left: parent.left
+                        width: seekSlider.position * (parent.width - 10)
+                        height: parent.height
+                        clip: true
+                        topLeftRadius: 5
+                        bottomLeftRadius: 5
+                    }
+                }
                 onValueChanged: {
                     console.log(Services.Media.currentPlayer.position,  value);
                     if (Services.Media.currentPlayer && Math.abs(Services.Media.currentPlayer.position - value) > 1) {
