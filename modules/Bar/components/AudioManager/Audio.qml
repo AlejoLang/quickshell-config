@@ -45,14 +45,8 @@ Rectangle {
             event.accepted = true;
         }
         onEntered: {
-            if (popup.visible) {
-                if(popup.content !== root.popComponent) {
-                    popup.changeContent(root.popComponent)
-                } 
-            } else {
-                popup.changeContent(root.popComponent);
-                popup.open();
-            }
+            popup.switchContent(root.popComponent);
+            popup.open();
         }
     }
 

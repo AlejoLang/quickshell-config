@@ -40,16 +40,8 @@ Rectangle {
         anchors.fill: parent
         hoverEnabled: true
         onEntered: {
-            if (popup && popup.visible) {
-                if(popup.content === root.batteryPopup) {
-                    return;
-                } else {
-                    popup.changeContent(root.batteryPopup);
-                }
-            } else if (popup) {
-                popup.changeContent(root.batteryPopup);
-                popup.open();
-            }
+            popup.changeContent(root.batteryPopup);
+            popup.open();
         }
     }
 

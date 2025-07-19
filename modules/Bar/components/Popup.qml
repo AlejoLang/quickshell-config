@@ -21,6 +21,7 @@ Scope {
     property var popupController: null  // Reference to the popup controller
 
     function open() {
+        closeAnimation.stop();
         if (!root.animating) {
             closeAnimation.stop();
             
@@ -42,6 +43,7 @@ Scope {
     function switchContent(newContent: PopupContent) {
         openAnimation.stop();
         closeAnimation.stop();
+        console.log("sad")
         
         changeContent(newContent);
         
@@ -49,6 +51,29 @@ Scope {
             root.animating = false;
             popupContent.opacity = 1.0;
             popupContent.y = 0;
+        }
+    }
+
+    SequentialAnimation {
+        id: sizeAnimation
+        property var targetContent
+        ParallelAnimation {
+            PropertyAnimation {
+                target: popupContent
+                property: "height"
+                from: root.content.height
+                to: targetContent.height
+                duration: 2000
+                easing.type: Easing.OutCubic
+            }
+            PropertyAnimation {
+                target: popupContent
+                property: "width"
+                from: root.content.width
+                to: targetContent.width
+                duration: 2000
+                easing.type: Easing.OutCubic
+            }
         }
     }
     
@@ -64,17 +89,11 @@ Scope {
                 duration: 200
                 easing.type: Easing.OutCubic
             }
-            
-            PropertyAnimation {
-                target: popupContent
-                property: "opacity"
-                from: 0.0
-                to: 1.0
-                duration: 200
-                easing.type: Easing.OutCubic
-            }
         }
-        
+        onStarted: {
+            root.animating = true;
+            popupWindow.visible = true;
+        } 
         onFinished: root.animating = false
     }
     
@@ -84,26 +103,19 @@ Scope {
         ParallelAnimation {
             PropertyAnimation {
                 target: popupContent
-                property: "opacity"
-                to: 0.0
-                duration: 200
-                easing.type: Easing.InCubic
-            }
-            
-            PropertyAnimation {
-                target: popupContent
                 property: "y"
                 from: 0
                 to: -popupContent.implicitHeight
-                duration: 200
-                easing.type: Easing.InCubic
+                duration: 300
+                easing.type: Easing.OutCubic
             }
         }
-        
+        onStarted: {
+            root.animating = true;
+        }
         onFinished: {
             root.visible = false;
             root.animating = false;
-            popupContent.y = -popupContent.implicitHeight;
         }
     }
 
@@ -116,6 +128,7 @@ Scope {
     }
     
     function changeContent(newContent: PopupContent) {
+        const currentY = popupContent.y;
         if (closeAnimation.running) {
             closeAnimation.stop();
             root.animating = false;
@@ -139,7 +152,6 @@ Scope {
         } else if (root.content.posX + root.content.children[0].implicitWidth > root.screen.width - 8) {
             root.onRight = true;
             root.content.posX = root.screen.width - root.content.children[0].implicitWidth - (45 + 8);
-            console.log(root.screen.width, root.content.children[0].implicitWidth, root.content.posX)
         }
         root.absX = locOw.x + (root.content.owner.width / 2) - (root.content.children[0].implicitWidth / 2);
         root.absY = locOw.y + root.content.owner.height;
@@ -169,7 +181,7 @@ Scope {
             id: popupContent
             anchors.margins: 0
 
-            opacity: 0.0
+            opacity: 1.0
             y: 0
             
             states: [

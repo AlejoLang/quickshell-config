@@ -4,7 +4,7 @@ import QtQuick
 Item {
     id: root
     property var window
-    property Item owner
+    property var owner
     property real posX
     property real posY
 

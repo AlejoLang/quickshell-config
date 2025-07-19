@@ -50,16 +50,8 @@ Rectangle {
         anchors.fill: parent
         hoverEnabled: true
         onEntered: {
-            if (popup.visible) {
-                if (popup.content === root.popComponent) {
-                    return;
-                } else {
-                    popup.changeContent(root.popComponent);
-                }
-            } else {
-                popup.changeContent(root.popComponent);
-                popup.open()
-            }
+            popup.changeContent(root.popComponent);
+            popup.open();
         }
         onWheel: (event) => {
             if (event.angleDelta.y < 0) {

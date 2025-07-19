@@ -43,16 +43,8 @@ Rectangle {
                     }
                     hoverEnabled: true
                     onEntered: {
-                        if (popup.visible) {
-                            if (popup.content === trayItemMenuContent) {
-                                return;
-                            } else {
-                                popup.changeContent(trayItemMenuContent);
-                            }
-                        } else {
-                            popup.changeContent(trayItemMenuContent);
-                            popup.open();
-                        }
+                        popup.changeContent(trayItemMenuContent);
+                        popup.open();
                     }
                 }
 
