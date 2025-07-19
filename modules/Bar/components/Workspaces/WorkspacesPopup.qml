@@ -68,21 +68,23 @@ Rectangle {
                         
                         MouseArea {
                             anchors.fill: parent
+                            propagateComposedEvents: true
                             onClicked: (event) => {
-                                Services.Hyprland.dispatch(`focuswindow address:${parent.modelData.address}`);
+                                Services.Hyprland.dispatch(`focuswindow address:0x${parent.modelData.address}`);
                                 workspaces.popupVisible = false; // Hide the popup after focusing
                                 event.accepted = false;
                             }
                         }
                         DefaultButton {
                             text: "close"
-                            backgroundColor: "#252525"
+                            background_color: "#252525"
                             x: parent.width - 10 - width
                             y: 10 
                             visible: Math.min(parent.width - 10 - width, parent.height - 20) > 30
+                            width: 32
+                            height: 32
                             onClicked: {
-                                Services.Hyprland.dispatch(`closewindow address:${parent.modelData.address}`);
-                                event.accepted = false;
+                                Services.Hyprland.dispatch(`closewindow address:0x${parent.modelData.address}`);
                             }
                         }
                     }
