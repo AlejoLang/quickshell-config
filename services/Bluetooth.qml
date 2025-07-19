@@ -47,6 +47,16 @@ Singleton {
         }
     }
 
+    function setBluetoothPoweredStatus(status) {
+        if(status === undefined || status === null) {
+            console.warn("Invalid status provided to setBluetoothPoweredStatus:", status);
+            return;
+        }
+        switchBluetoothPowerProcess.status = status;
+        switchBluetoothPowerProcess.running = true;
+        root.powered = status;
+    }
+
     function switchBluetoothPower() {
         if(switchBluetoothPowerProcess.running) {
             console.warn("Switch process is already running, skipping.");
@@ -127,6 +137,20 @@ Singleton {
             getDevicesProcess.running = true
         }
     } 
+
+    Process {
+        id: monitorBluetoothProcess;
+        running: true;
+        command: ["bluetoothctl", "--monitor"];
+        stdout: SplitParser {
+            onRead: {
+                console.log("Bluetooth monitor output:");
+                if(!getDevicesProcess.running) {
+                    getDevicesProcess.running = true;
+                }
+            }
+        }
+    }
 
     Process {
         id: initialBluetoothPoweredStatusProcess;
@@ -235,7 +259,7 @@ Singleton {
     Process {
         id: refreshDevicesProcess;
         running: false;
-        command: ["(echo \"scan on\"; sleep 5; echo \"scan off\"; exit)", " | ", "bluetoothctl"];
+        command: [ "bluetoothctl", "--timeout", "10", "scan", "on" ];
         stdout: StdioCollector {
             onStreamFinished: {
                 getDevicesProcess.running = true;
