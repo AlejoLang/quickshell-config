@@ -1,18 +1,19 @@
 pragma ComponentBehavior: Bound
 import QtQuick
 import Quickshell
-import QtQuick.Effects
 
 Scope {
     property ShellScreen screen
     property PopupContent content
     property var window
     property bool visible
+    property bool active: false
     property bool isHoverPopup
     property real absX
     property real absY
     property real popupY: popupContent.y
-    property real popupHeight: popupContent.implicitHeight
+    property real popupHeight: popupContent.height
+    property real popupWidth: popupContent.width
     
     property bool animating: false
     property bool onLeft: false
@@ -24,6 +25,7 @@ Scope {
 
     function open() {
         popupContent.children = content;
+        root.active = true;
         closeAnimation.stop();
         if (!root.animating) {
             console.log("Opening popup");
@@ -36,6 +38,7 @@ Scope {
     }
     
     function close() {
+        root.active = false;
         if (!root.animating) {
             openAnimation.stop();
             
@@ -53,9 +56,38 @@ Scope {
         
         if (root.visible) {
             root.animating = false;
-            popupContent.opacity = 1.0;
             popupContent.y = 0;
         }
+    }
+    
+    Rectangle {
+        id: voidPopupClone
+        width: root.content?.implicitWidth || 0
+        height: 0
+        x: root.absX || 0
+        y: root.absY || 0
+    }
+
+    PropertyAnimation {
+        id: fadeInAnimation
+        target: popupContent
+        property: "opacity"
+        from: 0
+        to: 1
+        duration: 200
+        easing.type: Easing.OutCubic
+        onFinished: {
+            root.animating = false;
+        }
+    }
+    PropertyAnimation {
+        id: fadeOutAnimation
+        target: popupContent
+        property: "opacity"
+        from: 1
+        to: 0
+        duration: 200
+        easing.type: Easing.OutCubic
     }
 
     SequentialAnimation {
@@ -67,6 +99,14 @@ Scope {
                 property: "y"
                 from: -popupContent.implicitHeight
                 to: 0
+                duration: 400
+                easing.type: Easing.InOutCubic
+            }
+            PropertyAnimation {
+                target: popupContent
+                property: "opacity"
+                from: 0
+                to: 1
                 duration: 200
                 easing.type: Easing.OutCubic
             }
@@ -75,7 +115,7 @@ Scope {
             root.animating = true;
             popupWindow.visible = true;
         } 
-        onFinished: root.animating = false
+        onFinished: {root.animating = false;}
     }
     
     SequentialAnimation {
@@ -87,10 +127,17 @@ Scope {
                 property: "y"
                 from: 0
                 to: -popupContent.implicitHeight
-                duration: 300
-                easing.type: Easing.OutCubic
+                duration: 400
+                easing.type: Easing.InOutCubic
             }
-            
+            PropertyAnimation {
+                target: popupContent
+                property: "opacity"
+                from: 1
+                to: 0
+                duration: 200
+                easing.type: Easing.InCubic
+            } 
         }
         onStarted: {
             root.animating = true;
@@ -98,6 +145,7 @@ Scope {
         onFinished: {
             root.visible = false;
             root.animating = false;
+            popupContent.children = voidPopupClone
         }
     }
 
@@ -110,6 +158,7 @@ Scope {
     }
     
     function changeContent(newContent: PopupContent) {
+        popupContent.opacity = 0;
         if (closeAnimation.running) {
             closeAnimation.stop();
             root.animating = false;
@@ -129,28 +178,27 @@ Scope {
             root.content.parent = popupContent;
         }
         const locOw = window.itemPosition(root.content.owner);
-        root.content.posX = locOw.x + (root.content.owner.width / 2) - ((root.content.children[0].implicitWidth+90) / 2);
+        root.content.posX = locOw.x + (root.content.owner.width / 2) - ((popupWindow.width) / 2);
         root.content.posY = locOw.y + root.content.owner.height;
         if (root.content.posX < 16) {
             root.onLeft = true;
             root.content.posX =  8;
         } else if (root.content.posX + root.content.children[0].implicitWidth > root.screen.width - 8) {
             root.onRight = true;
-            root.content.posX = root.screen.width - root.content.children[0].implicitWidth - (45 + 8);
+            root.content.posX = root.screen.width - root.content.children[0].implicitWidth - (45 + 8 + 20);
         }
         root.absX = locOw.x + (root.content.owner.width / 2) - (root.content.children[0].implicitWidth / 2);
         root.absY = locOw.y + root.content.owner.height;
-        
+        content.anchors.horizontalCenter = popupContent.horizontalCenter;
         if (root.visible) {
-            popupContent.opacity = 1.0;
             popupContent.y = 0;
         }
     }
    
     PopupWindow {
         id: popupWindow
-        implicitHeight: popupContent.implicitHeight + 45
-        implicitWidth: popupContent.implicitWidth + (root.onLeft || root.onRight ? 45 : 90)
+        implicitHeight: popupContent.implicitHeight + 45 + 20
+        implicitWidth: popupContent.implicitWidth + (root.onLeft || root.onRight ? 45 : 90) + 40
         anchor.window: root.window
         anchor.rect.x: root.content?.posX || 0
         anchor.rect.y: root.content?.posY || 0
@@ -158,11 +206,11 @@ Scope {
         color: "transparent"
         
         Rectangle {
-            bottomLeftRadius: root.onLeft ? 0 : 10
-            bottomRightRadius: root.onRight ? 0 : 10
+            bottomLeftRadius: root.onLeft ? 0 : 20
+            bottomRightRadius: root.onRight ? 0 : 20
             color: "#EFEFEF"
-            implicitWidth: root?.content?.children[0]?.implicitWidth || 0
-            implicitHeight: root?.content?.children[0]?.implicitHeight || 0
+            implicitWidth: root?.content?.children[0]?.implicitWidth + 40 || 0
+            implicitHeight: root?.content?.children[0]?.implicitHeight + 20 || 0
             id: popupContent
             anchors.margins: 0
             visible: root.visible
@@ -203,6 +251,12 @@ Scope {
                     }
                 }
             ]
+            Behavior on height {
+                NumberAnimation {
+                    duration: 200
+                    easing.type: Easing.OutCubic
+                }
+            }
         }
         
         mask: root.visible ? backgroundRegion : nullR
