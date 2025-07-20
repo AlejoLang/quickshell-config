@@ -18,6 +18,9 @@ Item {
         anchors.fill: parent
         hoverEnabled: true
         onEntered: {
+            if(popup.visible && popup.content === bluetoothPopup) {
+                return;
+            }
             popup.changeContent(root.bluetoothPopup);
             popup.open();
         }

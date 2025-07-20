@@ -5,17 +5,18 @@ import "../../../general"
 
 Rectangle {
     width: 400
-    height: Services.Bluetooth.bluetoothDevices.length * 50 + 150
+    height: Services.Bluetooth.bluetoothDevices.length * 50 + header.height + devicesHeader.height + 60
     color: "transparent"
     radius: 5
 
     ColumnLayout {
-        width: parent.width - 20
-        height: parent.height - 20
+        width: parent.width
+        height: parent.height
         anchors.horizontalCenter: parent.horizontalCenter
         spacing: 10
 
         RowLayout {
+            id: header
             Layout.fillWidth: true
             Layout.preferredHeight: childrenRect.height
             Layout.topMargin: 10
@@ -48,6 +49,7 @@ Rectangle {
             Layout.fillWidth: true
             Layout.preferredHeight: childrenRect.height + 20
             RowLayout {
+                id: devicesHeader
                 Layout.fillWidth: true
                 Layout.preferredHeight: 40
                 Layout.bottomMargin: 5

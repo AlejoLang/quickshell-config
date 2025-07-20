@@ -7,14 +7,14 @@ import Quickshell.Services.UPower
 Rectangle {
     id: root
     implicitWidth: 400
-    implicitHeight: batteryPopupColumn.height + 20
+    implicitHeight: batteryPopupColumn.height
     color: "#EFEFEF"
     bottomLeftRadius: 10
     bottomRightRadius: 10
 
     ColumnLayout {
         id: batteryPopupColumn
-        width: parent.width - 20
+        width: parent.width
         anchors.centerIn: parent
         spacing: 5
         Text {

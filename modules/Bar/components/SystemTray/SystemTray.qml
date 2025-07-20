@@ -43,6 +43,9 @@ Rectangle {
                     }
                     hoverEnabled: true
                     onEntered: {
+                        if(popup.visible && popup.content === trayItemMenuContent) {
+                            return;
+                        }
                         popup.changeContent(trayItemMenuContent);
                         popup.open();
                     }

@@ -189,7 +189,7 @@ Scope {
         }
         root.absX = locOw.x + (root.content.owner.width / 2) - (root.content.children[0].implicitWidth / 2);
         root.absY = locOw.y + root.content.owner.height;
-        content.anchors.horizontalCenter = popupContent.horizontalCenter;
+        content.anchors.centerIn = popupContent;
         if (root.visible) {
             popupContent.y = 0;
         }
@@ -197,7 +197,7 @@ Scope {
    
     PopupWindow {
         id: popupWindow
-        implicitHeight: popupContent.implicitHeight + 45 + 20
+        implicitHeight: popupContent.implicitHeight + 45 + 40
         implicitWidth: popupContent.implicitWidth + (root.onLeft || root.onRight ? 45 : 90) + 40
         anchor.window: root.window
         anchor.rect.x: root.content?.posX || 0
@@ -210,7 +210,7 @@ Scope {
             bottomRightRadius: root.onRight ? 0 : 20
             color: "#EFEFEF"
             implicitWidth: root?.content?.children[0]?.implicitWidth + 40 || 0
-            implicitHeight: root?.content?.children[0]?.implicitHeight + 20 || 0
+            implicitHeight: root?.content?.children[0]?.implicitHeight + 40 || 0
             id: popupContent
             anchors.margins: 0
             visible: root.visible

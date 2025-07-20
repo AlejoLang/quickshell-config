@@ -45,6 +45,9 @@ Rectangle {
             event.accepted = true;
         }
         onEntered: {
+            if(popup.visible && popup.content === popComponent) {
+                return;
+            }
             popup.switchContent(root.popComponent);
             popup.open();
         }

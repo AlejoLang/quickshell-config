@@ -50,6 +50,9 @@ Rectangle {
         anchors.fill: parent
         hoverEnabled: true
         onEntered: {
+            if(popup.visible && popup.content === popComponent) {
+                return;
+            }
             popup.changeContent(root.popComponent);
             popup.open();
         }

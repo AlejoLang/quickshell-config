@@ -7,7 +7,7 @@ Rectangle {
     id: root
     property list<QsMenuEntry> entries: []
     implicitWidth: 400
-    implicitHeight: trayItemMenuColumn.height + 20
+    implicitHeight: trayItemMenuColumn.height
     color: "#EFEFEF"
 
     ColumnLayout {
@@ -20,7 +20,7 @@ Rectangle {
             Rectangle {
                 id: trayItemMenuEntry
                 required property var modelData
-                width: root.width - 20
+                width: root.width
                 height: trayItemMenuEntry.modelData.text ? trayItemMenuEntryText.height : trayItemMenuEntrySeparator.height
                 color: "transparent"
                 radius: 5

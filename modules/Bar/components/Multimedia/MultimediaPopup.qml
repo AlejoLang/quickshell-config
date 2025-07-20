@@ -11,8 +11,6 @@ Rectangle {
     implicitHeight: 220
     implicitWidth: 600
     color: "#EFEFEF"
-    bottomLeftRadius: 10
-    bottomRightRadius: 10
 
     function convertSecondsToTime(seconds) {
         const date = new Date(seconds * 1000);
@@ -22,8 +20,8 @@ Rectangle {
 
     Image {
         id: coverImg
-        width: parent.width - 20
-        height: parent.height - 20
+        width: parent.width
+        height: parent.height
         anchors.centerIn: parent
         source: (Services.Media.currentPlayer?.trackArtUrl.toString() || "")
         fillMode: Image.PreserveAspectCrop
@@ -38,8 +36,8 @@ Rectangle {
     }
     Item {
         id: coverMask
-        width: coverImg.width - 20
-        height: coverImg.height - 20
+        width: coverImg.width
+        height: coverImg.height
         anchors.centerIn: parent
         visible: false
         layer.enabled: true
@@ -53,7 +51,7 @@ Rectangle {
 
     ColumnLayout {
         anchors.fill: parent
-        anchors.margins: 10
+        anchors.margins: 20
         spacing: 20
         width: parent.width
         ColumnLayout {
@@ -155,7 +153,7 @@ Rectangle {
                     Rectangle {
                         color: "#237dc7"
                         anchors.left: parent.left
-                        width: seekSlider.position * (parent.width - 10)
+                        width: seekSlider.position * (parent.width - 10) + 10
                         height: parent.height
                         clip: true
                         topLeftRadius: 5
@@ -177,7 +175,7 @@ Rectangle {
         running: Services.Media.currentPlayer?.playbackState === MprisPlaybackState.Playing
         onTriggered: {
             frameCount++;
-            if (frameCount >= 60) {
+            if (frameCount >= 60 && Services.Media.currentPlayer) {
                 frameCount = 0;
                 Services.Media.currentPlayer?.positionChanged();
             }

@@ -40,6 +40,9 @@ Rectangle {
         anchors.fill: parent
         hoverEnabled: true
         onEntered: {
+            if(popup.visible && popup.content === batteryPopup) {
+                return;
+            }
             popup.changeContent(root.batteryPopup);
             popup.open();
         }
