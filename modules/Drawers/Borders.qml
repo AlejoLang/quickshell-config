@@ -16,11 +16,13 @@ Item {
         anchors.fill: parent
         layer.enabled: true 
         visible: true 
-        color: "#EFEFEF"
+        color: "#efefef"
         layer.effect: MultiEffect {
             maskSource: mask
             maskEnabled: true
             maskInverted: true
+            maskThresholdMin: 0.5
+            maskSpreadAtMin: 1
         }
     }
 

@@ -11,6 +11,8 @@ Scope {
     property bool isHoverPopup
     property real absX
     property real absY
+    property real popupY: popupContent.y
+    property real popupHeight: popupContent.implicitHeight
     
     property bool animating: false
     property bool onLeft: false
@@ -21,8 +23,10 @@ Scope {
     property var popupController: null  // Reference to the popup controller
 
     function open() {
+        popupContent.children = content;
         closeAnimation.stop();
         if (!root.animating) {
+            console.log("Opening popup");
             closeAnimation.stop();
             
             root.animating = true;
@@ -55,29 +59,6 @@ Scope {
     }
 
     SequentialAnimation {
-        id: sizeAnimation
-        property var targetContent
-        ParallelAnimation {
-            PropertyAnimation {
-                target: popupContent
-                property: "height"
-                from: root.content.height
-                to: targetContent.height
-                duration: 2000
-                easing.type: Easing.OutCubic
-            }
-            PropertyAnimation {
-                target: popupContent
-                property: "width"
-                from: root.content.width
-                to: targetContent.width
-                duration: 2000
-                easing.type: Easing.OutCubic
-            }
-        }
-    }
-    
-    SequentialAnimation {
         id: openAnimation
         
         ParallelAnimation {
@@ -109,6 +90,7 @@ Scope {
                 duration: 300
                 easing.type: Easing.OutCubic
             }
+            
         }
         onStarted: {
             root.animating = true;
@@ -128,9 +110,12 @@ Scope {
     }
     
     function changeContent(newContent: PopupContent) {
-        const currentY = popupContent.y;
         if (closeAnimation.running) {
             closeAnimation.stop();
+            root.animating = false;
+        }
+        if (openAnimation.running) {
+            openAnimation.stop();
             root.animating = false;
         }
         root.onLeft = false;
@@ -176,12 +161,13 @@ Scope {
             bottomLeftRadius: root.onLeft ? 0 : 10
             bottomRightRadius: root.onRight ? 0 : 10
             color: "#EFEFEF"
-            implicitWidth: root?.content?.children[0]?.implicitWidth || 100
-            implicitHeight: root?.content?.children[0]?.implicitHeight || 100
+            implicitWidth: root?.content?.children[0]?.implicitWidth || 0
+            implicitHeight: root?.content?.children[0]?.implicitHeight || 0
             id: popupContent
             anchors.margins: 0
+            visible: root.visible
 
-            opacity: 1.0
+            opacity: 1
             y: 0
             
             states: [
@@ -218,137 +204,22 @@ Scope {
                 }
             ]
         }
-        Item {
-            id: corners
-            width: popupWindow.implicitWidth
-            height: popupWindow.implicitHeight
-            anchors.top: popupContent.top
-            Item {
-                id: topLeftCorner
-                visible: !root.onLeft
-                x: 0
-                y: 0
-                width: 45
-                height: 45
-                Rectangle {
-                    width: parent.width
-                    height: parent.height
-                    color: "#EFEFEF"
-                    layer.enabled: true
-                    visible: true
-                    layer.effect: MultiEffect {
-                        maskSource: leftPopupMask
-                        maskEnabled: true
-                        maskInverted: true 
-                    }
-                }
-                Rectangle {
-                    id: leftPopupMask
-                    width: parent.width
-                    height: parent.height
-                    color: "white"
-                    visible: false
-                    topRightRadius: parent.width / 2
-                    layer.enabled: true
-                }
-            }
-            Item {
-                id: topRightCorner
-                visible: !root.onRight
-                x: popupWindow.implicitWidth - 45
-                y: 0
-                width: 45
-                height: 45
-                Rectangle {
-                    width: parent.width
-                    height: parent.height
-                    color: "#EFEFEF"
-                    layer.enabled: true
-                    visible: true
-                    layer.effect: MultiEffect {
-                        maskSource: rightPopupMask
-                        maskEnabled: true
-                        maskInverted: true 
-                    }
-                }
-                Rectangle {
-                    id: rightPopupMask
-                    width: parent.width
-                    height: parent.height
-                    color: "white"
-                    visible: false
-                    topLeftRadius: parent.width / 2
-                    layer.enabled: true
-                }
-            }
-            Item {
-                id: bottomLeftCorner
-                visible: root.onLeft
-                x: 0
-                y: popupWindow.implicitHeight - 45
-                width: 45
-                height: 45
-                Rectangle {
-                    width: parent.width
-                    height: parent.height
-                    color: "#EFEFEF"
-                    layer.enabled: true
-                    visible: true
-                    layer.effect: MultiEffect {
-                        maskSource: bottomLeftCornerMask
-                        maskEnabled: true
-                        maskInverted: true 
-                    }
-                }
-                Rectangle {
-                    id: bottomLeftCornerMask
-                    width: parent.width
-                    height: parent.height
-                    color: "white"
-                    visible: false
-                    topLeftRadius: parent.width / 2
-                    layer.enabled: true
-                }
-            }
-            Item {
-                id: bottomRightCorner
-                visible: root.onRight
-                x: popupWindow.implicitWidth - 45
-                y: popupWindow.implicitHeight - 45
-                width: 45
-                height: 45
-                Rectangle {
-                    width: parent.width
-                    height: parent.height
-                    color: "#EFEFEF"
-                    layer.enabled: true
-                    visible: true
-                    layer.effect: MultiEffect {
-                        maskSource: bottomRightCornerMask
-                        maskEnabled: true
-                        maskInverted: true 
-                    }
-                }
-                Rectangle {
-                    id: bottomRightCornerMask
-                    width: parent.width
-                    height: parent.height
-                    color: "white"
-                    visible: false
-                    topRightRadius: parent.width / 2
-                    layer.enabled: true
-                }
-            }
-            
-        }
         
-        mask: root.visible ? backgroundRegion : null
+        mask: root.visible ? backgroundRegion : nullR
         Region {
             id: backgroundRegion
             x: popupContent.x
             y: popupContent.y
             width: popupContent.implicitWidth
             height: popupContent.implicitHeight
+            intersection: Intersection.Intersect
+        }
+        Region {
+            id: nullR
+            x: 0
+            y: 0
+            width: 0
+            height: 0
             intersection: Intersection.Intersect
         }
     }
