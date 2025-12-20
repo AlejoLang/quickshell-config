@@ -2,6 +2,7 @@ pragma ComponentBehavior: Bound
 import Quickshell
 import QtQuick
 import QtQuick.Effects
+import "../Bar"
 
 Variants {
     model: Quickshell.screens
@@ -26,9 +27,10 @@ Variants {
             mask: Region {
                 x: 0
                 y: bar.height
-                width: drawerWindow.width
+                width: !popup.visible ? drawerWindow.width : 0
                 height: drawerWindow.height - bar.height
                 intersection: Intersection.Subtract
+                regions: [popupBackground]
             }
 
             Exclusions {
@@ -48,18 +50,37 @@ Variants {
                     screen: drawerScope.modelData
                     bar: bar
                 }
+                Rectangle {
+                    id: popupShadow
+                    width: popup.width
+                    height: popup.height
+                    x: popup.anchor.rect.x
+                    y: popup.anchor.rect.y
+                    visible: popup.visible
+                    radius: 10
+                    color: "#efefef"
+                }   
             }
-
-            Rectangle {
-                id:bar
-                implicitHeight: 40
-                implicitWidth: parent.implicitWidth
-                color: "#efefef"
+            Bar {
+                id: bar
+                mainPopup: popup
                 anchors.left: parent.left
                 anchors.right: parent.right
                 anchors.top: parent.top
+            } 
+            PopupQuitter {
+                id: popupBackground
+                popup: popup
+                bar: bar
+                window: drawerWindow
+                screen: drawerScope.modelData
             }
-
+            Popup{
+                id: popup
+                bar: bar
+                window: drawerWindow
+            }
+           
         }
-    } 
+    }
 }
