@@ -41,4 +41,8 @@ Item {
         root.mainPopup.setContent(audioPopup, root)
     }
   }
+  AudioPopup {
+    id: audioPopup
+    visible: false
+  }
 }
