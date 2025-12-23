@@ -5,71 +5,68 @@ import Quickshell
 PopupWindow {
   id: root 
   property Item content: null
-  property Item pendingContent: null
-  property Item pendingAnchor: null
   property Item bar
   property PanelWindow window
   property bool isReplacing: false
-  property real targetX: 0
-  property real targetY: 0
-  property real targetWidth: content?.width + 20 ?? 1
-  property real targetHeight: content?.height + 20 ?? 1
+  property bool opening_closing
   
-  implicitHeight: Math.max(targetHeight, 1)
-  implicitWidth: Math.max(targetWidth, 1)
-  visible: content !== null
+  implicitHeight: root?.content ? root.content.height + 20 : 1
+  implicitWidth:  1
   anchor.window: window
-  anchor.rect.x: targetX
-  anchor.rect.y: targetY
+  anchor.rect.x: 0
+  anchor.rect.y: root.bar.height ?? 0
+  color: "transparent"
 
-  color:"transparent"
-
-  SequentialAnimation {
+  ParallelAnimation {
     id: openAnimation
-    
+    property Item content 
     PropertyAnimation {
       target: root
-      property: "targetY"
-      from: -root.content.height
+      property: "anchor.rect.y"
       to: root.bar.height + 10
       duration: 100
     }
     PropertyAnimation {
-      target: wrapperRect
-      property: "opacity"
-      from: 0
-      to: 1
-      duration: 50
+      target: root
+      property: "implicitHeight"
+      to: openAnimation.content.height + 20
+      duration: 100
     }
     onStarted: {
-      root.content.visible = true
-    }
-   
-    onFinished: {
+      console.log(openAnimation.content.height)
       root.visible = true
+      root.opening_closing = true
+    }
+    onFinished: {
+      root.content = openAnimation.content
+      root.content.visible = true
+      root.opening_closing = false
     }
   }
 
-  SequentialAnimation {
+  ParallelAnimation {
     id: closeAnimation
     PropertyAnimation {
-      target: wrapperRect
-      property: "opacity"
-      from: 1
-      to: 0
+      target: root
+      property: "anchor.rect.y"
+      to: root.bar.height
       duration: 100
     }
     PropertyAnimation {
       target: root
-      property: "targetY"
-      from: root.bar.height + 10
-      to: -root.content.height
+      property: "implicitHeight"
+      to: 1
       duration: 100
     }
+    onStarted: {
+      root.opening_closing = true
+    }
+    
     onFinished: {
       root.visible = false
       root.content.visible = false
       root.content = null
+      root.opening_closing = false
     }
   }
   ParallelAnimation {
@@ -78,31 +75,23 @@ PopupWindow {
     property real newX
     PropertyAnimation {
       target: root
-      property: "targetHeight"
+      property: "implicitHeight"
       to: changeItemAnimation.newItem.height + 20
-      duration: 200
+      duration: 100
       easing.type: Easing.InOutQuad
     }
     PropertyAnimation {
       target: root
-      property: "targetWidth"
+      property: "implicitWidth"
       to: changeItemAnimation.newItem.width + 20
-      duration: 200
+      duration: 100
       easing.type: Easing.InOutQuad
     }
     PropertyAnimation {
       target:root
-      property: "targetX"
+      property: "anchor.rect.x"
       to: changeItemAnimation.newX
-      duration: 200
-      easing.type: Easing.InOutQuad
-    }
-    PropertyAnimation {
-      target: wrapperRect
-      property: "opacity"
-      from: 0
-      to: 1
-      duration: 200
+      duration: 100
       easing.type: Easing.InOutQuad
     }
     onFinished: {
@@ -136,7 +125,7 @@ PopupWindow {
   function replaceContent(newContent: Item, anchorItem: Item) { 
     root.isReplacing  = true
     root.content.visible = false
-    wrapperRect.opacity = 0
+    wrapperRect.opacity = 1
     changeItemAnimation.newX = calculateX(newContent, anchorItem)
 
     changeItemAnimation.newItem = newContent 
@@ -150,11 +139,10 @@ PopupWindow {
       return;
     }
     
-    root.isReplacing = false
-    root.targetX = calculateX(newContent, anchorItem)
-    
-    root.content = newContent
-    root.visible = true
+    root.anchor.rect.x = calculateX(newContent, anchorItem)
+    root.implicitWidth = newContent.width + 20
+
+    openAnimation.content = newContent 
     openAnimation.running = true; 
   }
 
@@ -167,13 +155,16 @@ PopupWindow {
     anchors.fill: parent
     radius: 10
     color: "transparent"
+    clip: true
      
     Rectangle {
       color: "transparent"
       id: contentWrapper
       implicitWidth: root.content ? root.content.width : 0
       implicitHeight: root.content ? root.content.height : 0
-      anchors.centerIn: parent
+      anchors.top: parent.top
+      anchors.horizontalCenter: parent.horizontalCenter
+      anchors.topMargin: 10
       children: root.content ? [root.content] : []
     }
   } 

@@ -52,13 +52,28 @@ Variants {
                 }
                 Rectangle {
                     id: popupShadow
-                    width: popup.width
-                    height: popup.height
+                    width: popup.implicitWidth
+                    height: popup.implicitHeight
                     x: popup.anchor.rect.x
                     y: popup.anchor.rect.y
                     visible: popup.visible
                     radius: 10
                     color: "#efefef"
+                    onHeightChanged: {
+                        console.log(popupShadow.height)
+                    }
+                    Behavior on width {
+                        enabled: popup.visible && !popup.opening_closing && !popup.isReplacing
+                        NumberAnimation {
+                            duration: 10
+                        }
+                    }
+                    Behavior on height {
+                        enabled: popup.visible && !popup.opening_closing && !popup.isReplacing
+                        NumberAnimation {
+                            duration: 10
+                        }
+                    }
                 }   
             }
             Bar {
