@@ -75,31 +75,27 @@ PopupWindow {
     property real newX
     PropertyAnimation {
       target: root
-      property: "implicitHeight"
+      property: "height"
       to: changeItemAnimation.newItem.height + 20
-      duration: 100
-      easing.type: Easing.InOutQuad
+      duration: 200
     }
     PropertyAnimation {
       target: root
-      property: "implicitWidth"
+      property: "width"
       to: changeItemAnimation.newItem.width + 20
-      duration: 100
-      easing.type: Easing.InOutQuad
+      duration: 200
     }
     PropertyAnimation {
       target:root
       property: "anchor.rect.x"
       to: changeItemAnimation.newX
-      duration: 100
-      easing.type: Easing.InOutQuad
+      duration: 200
     }
     onFinished: {
       root.content = newItem
       root.content.visible = true
-      wrapperRect.height = root.content.height + 20
-      wrapperRect.width = root.content.width + 20
       root.isReplacing = false
+      wrapperRect.opacity = 1
     }
   }
 
@@ -125,9 +121,9 @@ PopupWindow {
   function replaceContent(newContent: Item, anchorItem: Item) { 
     root.isReplacing  = true
     root.content.visible = false
-    wrapperRect.opacity = 1
+    wrapperRect.opacity = 0
     changeItemAnimation.newX = calculateX(newContent, anchorItem)
-
+    
     changeItemAnimation.newItem = newContent 
     changeItemAnimation.running = true
   }
@@ -141,12 +137,13 @@ PopupWindow {
     
     root.anchor.rect.x = calculateX(newContent, anchorItem)
     root.implicitWidth = newContent.width + 20
-
+    wrapperRect.opacity = 1
     openAnimation.content = newContent 
     openAnimation.running = true; 
   }
 
   function close() {
+    wrapperRect.opacity = 0
     closeAnimation.running = true
   }
   
@@ -156,6 +153,12 @@ PopupWindow {
     radius: 10
     color: "transparent"
     clip: true
+
+    Behavior on opacity {
+      NumberAnimation {
+        duration: 200
+      }
+    }
      
     Rectangle {
       color: "transparent"
