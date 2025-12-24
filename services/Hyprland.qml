@@ -8,8 +8,8 @@ import QtQuick
 Singleton {
     id: root
 
-    readonly property list<HyprlandWorkspace> workspaces: Hyprland.workspaces
-    readonly property list<HyprlandMonitor> monitors: Hyprland.monitors
+    readonly property list<HyprlandWorkspace> workspaces: Hyprland.workspaces.values
+    readonly property list<HyprlandMonitor> monitors: Hyprland.monitors.values
     readonly property HyprlandToplevel activeToplevel: Hyprland.activeToplevel
     readonly property list<HyprlandToplevel> topLevels: Hyprland.toplevels.values
     readonly property HyprlandWorkspace focusedWorkspace: Hyprland.focusedWorkspace
@@ -28,7 +28,8 @@ Singleton {
         for(const topLevel of Hyprland.toplevels.values) {
            if(Object.keys(topLevel.lastIpcObject).length) {
                 const newClient = clientComp.createObject(root, {
-                            lastIpcObject: topLevel.lastIpcObject
+                            lastIpcObject: topLevel.lastIpcObject,
+                            address: topLevel.lastIpcObject.address.replace("0x", "")
                 });
                 aux.push(newClient);
            }
@@ -38,18 +39,33 @@ Singleton {
     }
 
     function getClientsByWorkspace() {
-        /*const aux = [];
-        for (const workspace of root.workspaces.values) {
-            const topLevel = root.topLevels.filter(c => {
-                return c.workspace?.id === workspace.id;
-            });
+        const aux = [];
+        for (const workspace of root.workspaces) {
+            const topLevel = [];
+            for(const tl of root.topLevels) {
+                if (tl.workspace?.id == workspace?.id) {
+                    topLevel.push(tl);
+                }
+            }
             const customTopLevel = topLevel.map(tl => {
+                let cl = null;
+                for(const client of root.clients) {
+                    if(client.address == tl.address) {
+                        cl = client;
+                        break;
+                    }
+                }
+                const name = tl.lastIpcObject.initialClass.toLowerCase().replace(/ /g, "-");
+                const app = DesktopEntries.applications.values.find(a => {
+                        return a.id.toLowerCase() === name}) ?? null;
+        
                 return customHyprlandTopLevelComp.createObject(root, {
-                    lastIpcObject: tl,
-                    width: root.clients.find(c => c.address === tl.address)?.width || 0,
-                    height: root.clients.find(c => c.address === tl.address)?.height || 0,
-                    y: root.clients.find(c => c.address === tl.address)?.y || 0,
-                    x: root.clients.find(c => c.address === tl.address)?.x || 0
+                    lastIpcObject: tl.lastIpcObject,
+                    icon: app.icon,
+                    width: cl?.width || 0,
+                    height: cl?.height || 0,
+                    y: cl?.y || 0,
+                    x: cl?.x || 0
                 });
             });
             if (customTopLevel.length > 0) {
@@ -60,7 +76,8 @@ Singleton {
                 aux.push(workspaceClients);
             }
         }
-        root.workspacesTopLevels = aux;*/
+        root.workspacesTopLevels = aux;
+        console.log(root.workspacesTopLevels[0])
     }
 
     Timer {
@@ -116,7 +133,7 @@ Singleton {
 
     component Client: QtObject {
         required property var lastIpcObject
-        readonly property string address: lastIpcObject.address
+        property string address: lastIpcObject.address
         readonly property string wmClass: lastIpcObject.class
         readonly property string title: lastIpcObject.title
         readonly property string initialClass: lastIpcObject.initialClass
@@ -135,8 +152,12 @@ Singleton {
 
     component CustomHyprlandTopLevel: QtObject {
         required property var lastIpcObject
-        readonly property string address: lastIpcObject.address
+        property string address: lastIpcObject.address
+        property string icon: "null"
         readonly property string title: lastIpcObject.title
+        readonly property string wmClass: lastIpcObject.class
+        readonly property string initialClass: lastIpcObject.initialClass
+        readonly property string initialTitle: lastIpcObject.initialTitle
         readonly property var wayland: lastIpcObject.wayland
         property var width
         property var height
