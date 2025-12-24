@@ -63,4 +63,17 @@ Singleton {
         }
         return 0
     }
+
+    function batteryIsCharging() {
+        if(battery) {
+            return root.battery.state == UPowerDeviceState.Charging
+        }
+        return false
+    }
+    function batteryIsDischarging() {
+        if(battery) {
+            return root.battery.state == UPowerDeviceState.Discharging
+        }
+        return false
+    }
 }
