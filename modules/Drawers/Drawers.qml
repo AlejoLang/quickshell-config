@@ -53,9 +53,9 @@ Variants {
                 Rectangle {
                     id: popupShadow
                     width: popup.implicitWidth
-                    height: popup.implicitHeight
-                    x: popup.anchor.rect.x
-                    y: popup.anchor.rect.y
+                    height: popup.implicitHeight - 10
+                    x: popup.targetX
+                    y: popup.anchor.rect.y + popup.targetY
                     visible: popup.visible
                     radius: 10
                     color: "#efefef"
