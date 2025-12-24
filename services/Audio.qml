@@ -30,15 +30,7 @@ Singleton {
             console.warn("Node with ID", nodeId, "not found in tracker.");
             return;
         }
-        if(volume < 0) {
-            node.audio.volume = 0.00; // Clamp volume to [0, 1]
-            return;
-        }
-        if(volume > 1) {
-            node.audio.volume = 1.00; // Clamp volume to [0, 1]
-            return;
-        }
-        node.audio.volume = volume
+        node.audio.volume = Math.max(0, Math.min(1, volume));
     }
 
     function toggleNodeMute(nodeId: int) {
@@ -50,22 +42,16 @@ Singleton {
         node.audio.muted = !node.audio.muted;
     }
 
-    function switchAudioSink(nodeId: int) {
-        if(switchAudioSinkProcess.running) {
-            console.warn("Switch process is already running, skipping.");
-            return;
+    function switchDefaultNode(nodeId: int) {
+        if(switchDefaultNodeProcess.running) {
+            console.warn("Node switch process already running");
         }
-        switchAudioSinkProcess.nodeId = nodeId;
-        switchAudioSinkProcess.running = true;
-    }
-
-    function switchAudioSource(nodeId: int) {
-        if(switchAudioSourceProcess.running) {
-            console.warn("Switch process is already running, skipping.");
-            return;
+        let node = tracker.objects.find(n => n.id === nodeId);
+        if(!node) {
+            console.warn("Node not found");
         }
-        switchAudioSourceProcess.nodeId = nodeId;
-        switchAudioSourceProcess.running = true;
+        switchDefaultNodeProcess.nodeId = nodeId; 
+        switchDefaultNodeProcess.running = true;
     }
 
     function getCurrentSourceIcon() {
@@ -78,6 +64,23 @@ Singleton {
 
     function getCurrentSinkVolumePerc() {
         return root.currentSink ? (root.currentSink.audio.volume * 100).toFixed(0) : 0;
+    }
+
+    function getCurrentNodeIcon(nodeId: int): string {
+        let node = tracker.objects.find(n => n.id === nodeId);
+        if(!node) {
+            console.warn("Node not found");
+        }
+        if(nodeId == root.currentSink.id) {
+            return root.getCurrentSinkIcon()
+        } else if (nodeId == root.currentSource.id) {
+            return root.getCurrentSourceIcon()
+        }
+        if(node.isSink) {
+            return 'speaker';
+        } else {
+            return 'mic';
+        }
     }
 
     function increaseCurrentSinkVolume(delta: real) {
@@ -102,17 +105,11 @@ Singleton {
     }
 
     Process {
-        id: switchAudioSinkProcess
+        id: switchDefaultNodeProcess
         property int nodeId: 0 // Default to first sink
         command: ["wpctl", "set-default", nodeId]
         running: false
     } 
-    Process {
-        id: switchAudioSourceProcess
-        property int nodeId: 0 // Default to first source
-        command: ["wpctl", "set-default", nodeId]
-        running: false
-    }
     Process {
         id: getSourceIconProcess
         property int nodeId: 0 // Default to first node
@@ -145,6 +142,7 @@ Singleton {
             }
         }
     }
+    
     PwObjectTracker {
         id: tracker
         objects: [...root.sinksList, ...root.sourcesList]
