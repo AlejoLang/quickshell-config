@@ -9,11 +9,15 @@ PopupWindow {
   property PanelWindow window
   property bool isReplacing: false
   property bool opening_closing
+  property real targetHeight: 1
+  property real targetWidth: 1
+  property real targetX: 0
+  property real targetY: 0 
   
-  implicitHeight: root?.content ? root.content.height + 20 : 1
-  implicitWidth:  1
+  implicitHeight: targetHeight
+  implicitWidth:  targetWidth 
   anchor.window: window
-  anchor.rect.x: 0
+  anchor.rect.x: targetX
   anchor.rect.y: root.bar.height ?? 0
   color: "transparent"
 
@@ -22,24 +26,25 @@ PopupWindow {
     property Item content 
     PropertyAnimation {
       target: root
-      property: "anchor.rect.y"
-      to: root.bar.height + 10
+      property: "targetY"
+      from: -openAnimation.content.height
+      to: 10
       duration: 100
     }
     PropertyAnimation {
-      target: root
-      property: "implicitHeight"
-      to: openAnimation.content.height + 20
+      target: wrapperRect
+      property: "opacity"
+      from: 0
+      to: 1
       duration: 100
     }
     onStarted: {
-      console.log(openAnimation.content.height)
+      root.content = openAnimation.content
       root.visible = true
+      root.content.visible = true
       root.opening_closing = true
     }
     onFinished: {
-      root.content = openAnimation.content
-      root.content.visible = true
       root.opening_closing = false
     }
   }
@@ -48,14 +53,16 @@ PopupWindow {
     id: closeAnimation
     PropertyAnimation {
       target: root
-      property: "anchor.rect.y"
-      to: root.bar.height
+      property: "targetY"
+      from: 10
+      to: -root.content.height
       duration: 100
     }
     PropertyAnimation {
-      target: root
-      property: "implicitHeight"
-      to: 1
+      target: wrapperRect
+      property: "opacity"
+      from: 1
+      to: 0
       duration: 100
     }
     onStarted: {
@@ -75,26 +82,30 @@ PopupWindow {
     property real newX
     PropertyAnimation {
       target: root
-      property: "height"
-      to: changeItemAnimation.newItem.height + 20
-      duration: 200
+      property: "targetHeight"
+      to: changeItemAnimation.newItem.height + 30
+      duration: 300
     }
     PropertyAnimation {
       target: root
-      property: "width"
+      property: "targetWidth"
       to: changeItemAnimation.newItem.width + 20
-      duration: 200
+      duration: 300
     }
     PropertyAnimation {
       target:root
-      property: "anchor.rect.x"
+      property: "targetX"
       to: changeItemAnimation.newX
-      duration: 200
+      duration: 300
+    }
+    onStarted: {
+      //root.content.visible = false
+      wrapperRect.opacity = 0
     }
     onFinished: {
+      root.isReplacing = false
       root.content = newItem
       root.content.visible = true
-      root.isReplacing = false
       wrapperRect.opacity = 1
     }
   }
@@ -120,55 +131,51 @@ PopupWindow {
 
   function replaceContent(newContent: Item, anchorItem: Item) { 
     root.isReplacing  = true
-    root.content.visible = false
-    wrapperRect.opacity = 0
     changeItemAnimation.newX = calculateX(newContent, anchorItem)
-    
     changeItemAnimation.newItem = newContent 
     changeItemAnimation.running = true
   }
   
   function setContent(newContent: Item, anchorItem: Item) {
+    root.isReplacing = false
     if(newContent === root.content) return
     if(root.content) {
       replaceContent(newContent, anchorItem);
       return;
     }
-    
-    root.anchor.rect.x = calculateX(newContent, anchorItem)
-    root.implicitWidth = newContent.width + 20
-    wrapperRect.opacity = 1
+    root.targetX = calculateX(newContent, anchorItem)
+    root.targetHeight = Qt.binding(() => newContent.height + 30)
+    root.targetWidth = Qt.binding(() => newContent.width + 20)
     openAnimation.content = newContent 
     openAnimation.running = true; 
   }
 
   function close() {
-    wrapperRect.opacity = 0
     closeAnimation.running = true
   }
-  
+
   Rectangle {
     id: wrapperRect
-    anchors.fill: parent
+    width: parent.width
+    height: parent.height - 10
     radius: 10
     color: "transparent"
-    clip: true
+    y: root.targetY
 
     Behavior on opacity {
       NumberAnimation {
-        duration: 200
+        duration: 25
       }
     }
-     
+
     Rectangle {
-      color: "transparent"
       id: contentWrapper
-      implicitWidth: root.content ? root.content.width : 0
-      implicitHeight: root.content ? root.content.height : 0
-      anchors.top: parent.top
-      anchors.horizontalCenter: parent.horizontalCenter
-      anchors.topMargin: 10
+      anchors.fill: parent
+      anchors.margins: 10
       children: root.content ? [root.content] : []
+      color: "transparent"
+      clip: true
+      
     }
   } 
 }
