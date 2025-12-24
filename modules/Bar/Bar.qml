@@ -32,8 +32,9 @@ Item {
         anchors.verticalCenter: parent.verticalCenter
         spacing: 20
         Workspaces {
-        id: workspaces 
-        anchors.verticalCenter: parent.verticalCenter
+          id: workspaces 
+          anchors.verticalCenter: parent.verticalCenter
+          mainPopup: root.mainPopup
         }
         CurrentWindow {
           id: currentWindow
