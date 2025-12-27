@@ -32,7 +32,7 @@ Button {
     id: buttonBackground
     width: root.buttonSize
     height: root.buttonSize
-    radius: root.statusPressed ? root.buttonRadiusActive : (root.width / 2)
+    radius: root.pressed ? root.buttonRadiusActive : root.statusPressed ? root.buttonRadiusActive : (root.width / 2)
     color: root.statusPressed ? root.backgroundActiveColor : root.backgroundInactiveColor
     Behavior on radius {
       PropertyAnimation {
