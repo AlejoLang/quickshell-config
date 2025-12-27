@@ -111,6 +111,10 @@ PopupWindow {
       root.content.visible = true
       wrapperRectOpAnim.enabled = true
       wrapperRect.opacity = 1
+      root.targetHeight = Qt.binding(() => root.content.height + 30)
+      root.targetWidth = Qt.binding(() => root.content.width + 20)
+      root.implicitHeight = Qt.binding(() => root.content.height + 30)
+      root.implicitWidth = Qt.binding(() => root.content.width + 20)
     }
   }
 
@@ -150,6 +154,8 @@ PopupWindow {
     root.targetX = calculateX(newContent, anchorItem)
     root.targetHeight = Qt.binding(() => newContent.height + 30)
     root.targetWidth = Qt.binding(() => newContent.width + 20)
+    root.implicitHeight = Qt.binding(() => newContent.height + 30)
+    root.implicitWidth = Qt.binding(() => newContent.width + 20)
     openAnimation.content = newContent 
     openAnimation.running = true; 
   }
