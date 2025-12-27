@@ -29,14 +29,14 @@ PopupWindow {
       property: "targetY"
       from: -openAnimation.content.height
       to: 10
-      duration: 100
+      duration: 150
     }
     PropertyAnimation {
       target: wrapperRect
       property: "opacity"
       from: 0
       to: 1
-      duration: 100
+      duration: 150
     }
     onStarted: {
       root.content = openAnimation.content
@@ -55,15 +55,15 @@ PopupWindow {
       target: root
       property: "targetY"
       from: 10
-      to: -root.content.height
-      duration: 100
+      to: -root?.content?.height ?? 10
+      duration: 150
     }
     PropertyAnimation {
       target: wrapperRect
       property: "opacity"
       from: 1
       to: 0
-      duration: 100
+      duration: 150
     }
     onStarted: {
       root.opening_closing = true
@@ -84,28 +84,32 @@ PopupWindow {
       target: root
       property: "targetHeight"
       to: changeItemAnimation.newItem.height + 30
-      duration: 300
+      duration: 150
     }
     PropertyAnimation {
       target: root
       property: "targetWidth"
       to: changeItemAnimation.newItem.width + 20
-      duration: 300
+      duration: 150
     }
     PropertyAnimation {
       target:root
       property: "targetX"
       to: changeItemAnimation.newX
-      duration: 300
+      duration: 150
     }
     onStarted: {
       //root.content.visible = false
+      wrapperRectOpAnim.enabled = false
       wrapperRect.opacity = 0
+      root.implicitHeight = changeItemAnimation.newItem.height + 30
+      root.implicitWidth = changeItemAnimation.newItem.width + 20
     }
     onFinished: {
       root.isReplacing = false
       root.content = newItem
       root.content.visible = true
+      wrapperRectOpAnim.enabled = true
       wrapperRect.opacity = 1
     }
   }
@@ -156,15 +160,16 @@ PopupWindow {
 
   Rectangle {
     id: wrapperRect
-    width: parent.width
-    height: parent.height - 10
+    width: root.targetWidth
+    height: root.targetHeight - 10
     radius: 10
     color: "transparent"
     y: root.targetY
 
     Behavior on opacity {
+      id: wrapperRectOpAnim
       NumberAnimation {
-        duration: 25
+        duration: 100
       }
     }
 
