@@ -13,11 +13,13 @@ Slider {
   }
 
   property int size
+  property string icon: ""
   property color colorActive
   property color colorInactive
   property real trackSize: size == MaterialSlider.Size.XS ? 16 : size == MaterialSlider.Size.S ? 24 : size == MaterialSlider.Size.M ? 40 : size == MaterialSlider.Size.L ? 56 : 96
   property real trackRadius: size == MaterialSlider.Size.XS ? 8 : size == MaterialSlider.Size.S ? 8 : size == MaterialSlider.Size.M ? 12 : size == MaterialSlider.Size.L ? 16 : 24
   property real handleHeight: size == MaterialSlider.Size.XS ? 44 : size == MaterialSlider.Size.S ? 44 : size == MaterialSlider.Size.M ? 52 : size == MaterialSlider.Size.L ? 68 : 108
+  property real iconSize: size == MaterialSlider.Size.XS ? 0 : size == MaterialSlider.Size.S ? 16 : size == MaterialSlider.Size.M ? 24 : size == MaterialSlider.Size.L ? 24 : 32
 
   background: Rectangle {
     anchors.fill: parent
@@ -70,6 +72,18 @@ Slider {
       }
     }
   }
+
+  Text {
+    id: sliderIcon
+    text: root.icon
+    font.family: "Material Symbols Rounded"
+    font.pixelSize: root.iconSize
+    visible: root.icon != ""
+    x: activeTrack.width > sliderIcon.width + 5 ? activeTrack.x + 5 : inactiveTrack.x + 5
+    anchors.verticalCenter: parent.verticalCenter
+    color: activeTrack.width > sliderIcon.width + 5 ? "#101010" : "#efefef"
+  }
+
   onPressedChanged: {
     if(root.pressed) {
       if (root.orientation == Qt.Horizontal) {
