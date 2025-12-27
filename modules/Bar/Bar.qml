@@ -1,5 +1,6 @@
 pragma ComponentBehavior: Bound
 import QtQuick
+import QtQuick.Layouts
 import "components/Workspaces"
 import "components/CurrentWindow"
 import "components/DateTime"
@@ -21,55 +22,57 @@ Item {
     anchors.leftMargin: 16
     anchors.rightMargin: 16
     color: "transparent"
-    Row {
+    RowLayout {
       id: barLayout
-      spacing: 20
       anchors.fill: parent
       anchors.verticalCenter: parent.verticalCenter
       Row {
         id: leftBarModule
-        anchors.left: barLayout.left
-        anchors.verticalCenter: parent.verticalCenter
+        Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
+        Layout.maximumWidth: parent.width / 3
+        Layout.minimumWidth: parent.width / 3
         spacing: 20
         Workspaces {
           id: workspaces 
-          anchors.verticalCenter: parent.verticalCenter
           mainPopup: root.mainPopup
         }
         CurrentWindow {
           id: currentWindow
-          anchors.verticalCenter: parent.verticalCenter
+        }
+        Item {
+          Layout.fillWidth:true
         }
       }
-      Row {
+      RowLayout {
         id: centerBarModule
+        Layout.alignment: Qt.AlignCenter
+        Layout.fillWidth: true
         spacing: 20
-        anchors.centerIn: parent
         MultimediaWidget {
-          anchors.verticalCenter: parent.verticalCenter
+          Layout.alignment: Qt.AlignCenter
         }
       }
-      Row {
+      RowLayout {
         id: rightBarModule
-        anchors.right: barLayout.right
-        anchors.verticalCenter: parent.verticalCenter
+        Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
+        Layout.maximumWidth: parent.width / 3
+        Layout.minimumWidth: parent.width / 3
         spacing: 20
-        NetworkWidget{
-          anchors.verticalCenter:parent.verticalCenter
-        }
-        BluetoothWidget {
-          anchors.verticalCenter: parent.verticalCenter
+        Item {
+          Layout.fillWidth:true
         }
         AudioWidget {
           mainPopup: root.mainPopup
-          anchors.verticalCenter: parent.verticalCenter
+        }
+        NetworkWidget{
+        }
+        BluetoothWidget {
         }
         BatteryWidget{
           mainPopup: root.mainPopup
-          anchors.verticalCenter: parent.verticalCenter
         }
         DateTime{
-          anchors.verticalCenter: parent.verticalCenter
+          Layout.alignment: Qt.AlignVCenter
         }
       }
     }
