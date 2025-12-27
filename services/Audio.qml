@@ -82,6 +82,15 @@ Singleton {
             return 'mic';
         }
     }
+    
+    function getNodeVolumeIcon(nodeId: int): string {
+        let node = tracker.objects.find(n => n.id === nodeId);
+        if(!node) {
+            console.warn("Node not found")
+        }
+        const volume = node?.audio?.muted ? -1 : (node?.audio?.volume * 100 ?? -1)
+        return AudioIcons.getVolumeIcon(volume, node?.isSink)
+    }
 
     function increaseCurrentSinkVolume(delta: real) {
         if (root.currentSink) {

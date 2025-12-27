@@ -13,6 +13,26 @@ const audioClassIcons = {
     microphone: 'mic',
 };
 
+function getVolumeIcon(volume, isSink) {
+    if (isSink) {
+        if (volume < 0) {
+            return 'volume_off';
+        } else if (volume <= 30) {
+            return 'volume_mute';
+        } else if (volume <= 60) {
+            return 'volume_down';
+        } else {
+            return 'volume_up';
+        }
+    } else {
+        if (volume < 0) {
+            return 'mic_off';
+        } else {
+            return 'mic';
+        }
+    }
+}
+
 function getAudioIconName(className, typeName) {
     if (typeName === 'Audio/Sink') {
         if (className.includes('audio-card')) {
