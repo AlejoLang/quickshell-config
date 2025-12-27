@@ -144,7 +144,6 @@ Singleton {
         command: ["bluetoothctl", "--monitor"];
         stdout: SplitParser {
             onRead: {
-                console.log("Bluetooth monitor output:");
                 if(!getDevicesProcess.running) {
                     getDevicesProcess.running = true;
                 }

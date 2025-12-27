@@ -61,7 +61,7 @@ Singleton {
         
                 return customHyprlandTopLevelComp.createObject(root, {
                     lastIpcObject: tl.lastIpcObject,
-                    icon: app.icon,
+                    icon: app?.icon ?? "emblem-generic",
                     width: cl?.width || 0,
                     height: cl?.height || 0,
                     y: cl?.y || 0,
@@ -77,7 +77,6 @@ Singleton {
             }
         }
         root.workspacesTopLevels = aux;
-        console.log(root.workspacesTopLevels[0])
     }
 
     Timer {
