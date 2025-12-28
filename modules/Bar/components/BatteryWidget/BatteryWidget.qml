@@ -18,7 +18,7 @@ Item {
       anchors.verticalCenter: parent.verticalCenter
     }
     Text {
-      text: Battery.getBatteryPercentage()
+      text: Math.round(Battery.getBatteryPercentage())
       anchors.verticalCenter: parent.verticalCenter
     }
   }
@@ -31,5 +31,9 @@ Item {
       }
       root.mainPopup.setContent(batteryPopup, root);
     }
+  }
+  BatteryPopup {
+    id: batteryPopup
+    visible: false
   }
 }
