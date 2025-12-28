@@ -104,6 +104,7 @@ PopupWindow {
       wrapperRect.opacity = 0
       root.implicitHeight = changeItemAnimation.newItem.height + 30
       root.implicitWidth = changeItemAnimation.newItem.width + 20
+      root.anchor.rect.x = changeItemAnimation.newX
     }
     onFinished: {
       root.isReplacing = false
@@ -152,6 +153,7 @@ PopupWindow {
       return;
     }
     root.targetX = calculateX(newContent, anchorItem)
+    root.anchor.rect.x = root.targetX
     root.targetHeight = Qt.binding(() => newContent.height + 30)
     root.targetWidth = Qt.binding(() => newContent.width + 20)
     root.implicitHeight = Qt.binding(() => newContent.height + 30)
