@@ -13,7 +13,7 @@ Item {
     spacing: 5
     anchors.verticalCenter: parent.verticalCenter
     IconImage {
-      source: Hyprland?.activeClient ? Quickshell.iconPath(Hyprland.activeClient.icon) : ""
+      source: Hyprland?.activeClient ? Quickshell.iconPath(Hyprland.activeClient.icon) : Quickshell.iconPath("computer")
       implicitSize: 24
       anchors.verticalCenter: parent.verticalCenter
     }
