@@ -14,7 +14,6 @@ Item {
       propagateComposedEvents: true
       acceptedButtons: Qt.RightButton | Qt.LeftButton | Qt.MiddleButton
       onClicked: (event) => {
-        console.log(workspacesPopup.width, workspacesPopup.height)
         if(event.button == Qt.MiddleButton) {
           if(root.mainPopup.content == workspacesPopup) {
             root.mainPopup.close();
