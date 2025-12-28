@@ -1,5 +1,6 @@
 pragma ComponentBehavior: Bound
 import QtQuick
+import QtQuick.Layouts
 import qs.modules.Bar
 import qs.services
 
@@ -9,19 +10,23 @@ Item {
 
   implicitWidth: audioRow.width
   implicitHeight: audioRow.height
-  Row {
+  RowLayout {
     id: audioRow
     spacing: 5
     Text {
       // qmllint disable unqualified
-      text: Audio.getCurrentSinkIcon()
+      id: volumeIcon
+      text: Audio.getNodeVolumeIcon(Audio?.currentSink?.id ?? -1)
       font.family: "Material Symbols Rounded"
       font.pixelSize: 24
-      anchors.verticalCenter: parent.verticalCenter
+      Layout.alignment: Qt.AlignVCenter
     }
     Text {
+      id: volumePercentage
       text: Audio.getCurrentSinkVolumePerc()
-      anchors.verticalCenter: parent.verticalCenter
+      font.pixelSize: 16
+      horizontalAlignment: Qt.AlignRight
+      verticalAlignment: Qt.AlignVCenter
     }
   }
   MouseArea {

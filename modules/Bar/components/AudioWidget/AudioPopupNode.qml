@@ -18,6 +18,7 @@ Item {
     id: nodeCol
     width: parent.width
     height: childrenRect.height
+    anchors.centerIn: parent
     spacing: 5
     RowLayout {
       id: nodeId
@@ -27,12 +28,12 @@ Item {
         id: nodeIcon
         text: Audio.getCurrentNodeIcon(root.selectedNode.id);
         font.family: "Material Symbols Rounded"
-        font.pixelSize: 32
+        font.pixelSize: 20
       }
       Text {
         id: nodeName
         text: root.selectedNode.description
-        font.pixelSize: 24
+        font.pixelSize: 20
         Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
         Layout.fillWidth: true
         clip: true
@@ -42,41 +43,43 @@ Item {
         buttonIcon: root.expanded ? "arrow_drop_up" : "arrow_drop_down"
         backgroundColor: "#32acac"
         textColor: "#404040"
+        Layout.fillHeight: true
         Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
         onClicked: {
           root.expanded = !root.expanded
         }
       } 
     }
-    MaterialSlider {
-      id: audioSlider
-      size: MaterialSlider.Size.XS
-      colorActive: "#32acac"
-      colorInactive: "#404040"
-      height: 30
-      width: parent.width - 20
-      anchors.horizontalCenter: parent.horizontalCenter
-      stepSize: 0.01
-      snapMode: Slider.SnapAlways
-      value: root.selectedNode?.audio?.volume ?? 0
-      onPositionChanged: {
-        console.log(audioSlider.position)
-        Audio.setNodeVolume(root.selectedNode.id, audioSlider.position)
-      }
-      Timer {
-        id: refreshTimer
-
+    RowLayout {
+      width: parent.width
+      height: 60
+      MaterialSlider {
+        id: audioSlider
+        size: MaterialSlider.Size.M
+        colorActive: "#32acac"
+        colorInactive: "#404040"
+        icon: Audio.getNodeVolumeIcon(root?.selectedNode?.id ?? 0)
+        Layout.fillHeight: true
+        Layout.fillWidth: true
+        stepSize: 0.01
+        snapMode: Slider.SnapAlways
+        value: root.selectedNode?.audio?.volume ?? 0
+        onPositionChanged: {
+          Audio.setNodeVolume(root.selectedNode.id, audioSlider.position)
+        }
       }
     }
     Column {
       id: nodeListColumn
       height: root.expanded ? childrenRect.height : 0 
       width: parent.width
+      spacing: 4
       Repeater {
         model: root.nodeList
         Text {
           required property PwNode modelData
           text: modelData.description
+          font.pixelSize: 16
           width: parent.width
           clip: true
           MouseArea {
