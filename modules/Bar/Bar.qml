@@ -65,6 +65,7 @@ Item {
           mainPopup: root.mainPopup
         }
         NetworkWidget{
+          mainPopup: root.mainPopup
         }
         BluetoothWidget {
         }
