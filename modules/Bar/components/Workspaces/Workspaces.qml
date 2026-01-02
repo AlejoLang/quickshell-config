@@ -32,8 +32,6 @@ Item {
       MaterialToggleButton {
         required property var modelData
         autoToggle: false
-        backgroundActiveColor: '#3d3e74'
-        backgroundInactiveColor: "#767676"
         textActiveColor: "#efefef"
         textInactiveColor: "#010101"
         buttonIcon: modelData.id

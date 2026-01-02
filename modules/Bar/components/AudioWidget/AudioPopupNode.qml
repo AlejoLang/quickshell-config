@@ -41,8 +41,6 @@ Item {
       MaterialIconButton{
         id: openListButton
         buttonIcon: root.expanded ? "arrow_drop_up" : "arrow_drop_down"
-        backgroundColor: "#32acac"
-        textColor: "#404040"
         Layout.fillHeight: true
         Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
         onClicked: {
@@ -56,8 +54,6 @@ Item {
       MaterialSlider {
         id: audioSlider
         size: MaterialSlider.Size.M
-        colorActive: "#32acac"
-        colorInactive: "#404040"
         icon: Audio.getNodeVolumeIcon(root?.selectedNode?.id ?? 0)
         Layout.fillHeight: true
         Layout.fillWidth: true

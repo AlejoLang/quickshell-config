@@ -39,8 +39,6 @@ Item {
               Layout.preferredHeight: 36
               stepSize: 0.01
               value: displayControlCol.modelData.brightness
-              colorActive: "#32acac"
-              colorInactive: "#404040"
               onValueChanged: {
                 Display.setBrightness(displayControlCol.modelData ,brightnessSlider.value)
               }
