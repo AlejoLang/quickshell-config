@@ -14,8 +14,8 @@ Slider {
 
   property int size
   property string icon: ""
-  property color colorActive
-  property color colorInactive
+  property color colorActive: "#32acac"
+  property color colorInactive: "#575757"
   property real trackSize: size == MaterialSlider.Size.XS ? 16 : size == MaterialSlider.Size.S ? 24 : size == MaterialSlider.Size.M ? 40 : size == MaterialSlider.Size.L ? 56 : 96
   property real trackRadius: size == MaterialSlider.Size.XS ? 8 : size == MaterialSlider.Size.S ? 8 : size == MaterialSlider.Size.M ? 12 : size == MaterialSlider.Size.L ? 16 : 24
   property real handleHeight: size == MaterialSlider.Size.XS ? 44 : size == MaterialSlider.Size.S ? 44 : size == MaterialSlider.Size.M ? 52 : size == MaterialSlider.Size.L ? 68 : 108

@@ -6,10 +6,10 @@ Button {
   id: root
   property bool statusPressed 
   property bool autoToggle: true
-  property color backgroundActiveColor
-  property color backgroundInactiveColor
-  property color textActiveColor
-  property color textInactiveColor
+  property color backgroundActiveColor: "#32ACAC"
+  property color backgroundInactiveColor: "#575757"
+  property color textActiveColor: "#EFEFEF"
+  property color textInactiveColor: "#333333"
   property string buttonIcon
 
   enum Size {

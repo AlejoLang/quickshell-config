@@ -5,8 +5,10 @@ import QtQuick.Controls
 Button {
   id: root
   property string buttonIcon
-  property color backgroundColor
-  property color textColor
+  property color backgroundColor: "#32ACAC"
+  property color textColor: "#EFEFEF"
+
+  bottomPadding: 0
 
   enum Size {
     XS,
@@ -54,8 +56,7 @@ Button {
     text: root.buttonIcon
     font.family: "Material Symbols Rounded"
     font.pixelSize: root.iconSize
-    horizontalAlignment: Text.AlignHCenter
-    verticalAlignment: Text.AlignVCenter
+    anchors.horizontalCenter: root.horizontalCenter
     color: root.textColor
     Behavior on color {
       PropertyAnimation {

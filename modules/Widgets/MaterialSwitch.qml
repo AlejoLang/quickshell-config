@@ -5,19 +5,22 @@ import QtQuick.Controls
 Switch {
   id: root
 
-  property color backgroundActiveColor
-  property color backgroundInactiveColor
-  property color indicatorActiveColor
-  property color indicatorInactiveColor
-  width: 50
-  height: 30
+  property color backgroundActiveColor: "#32ACAC"
+  property color backgroundInactiveColor: '#575757'
+  property color indicatorActiveColor: "#EFEFEF"
+  property color indicatorInactiveColor: '#333333'
+
+  leftPadding: 0
+  rightPadding: 0
+  topPadding: 0
+  bottomPadding: 0
 
   indicator: Rectangle {
-    width: 50
-    height: 30
+    implicitWidth: 50
+    implicitHeight: 30
     radius: 16
     color: root.checked ? root.backgroundActiveColor : root.backgroundInactiveColor
-    border.width: 2
+    border.width: 1
     border.color: root.checked ? root.indicatorActiveColor : root.indicatorInactiveColor
  
     Rectangle {
