@@ -4,6 +4,8 @@ import Quickshell
 import Quickshell.Io
 import QtQuick
 
+import "../utils/bluetoothIcons.js" as BluetoothIcons
+
 Singleton {
     id: root;
     property bool powered: false
@@ -31,6 +33,7 @@ Singleton {
                 name: data['org.bluez.Device1']?.Name.data ?? "",
                 address: data['org.bluez.Device1']?.Address.data ?? "",
                 type: data['org.bluez.Device1']?.Icon.data ?? "",
+                icon: BluetoothIcons.getBluetoothIconForType(data['org.bluez.Device1']?.Icon.data ?? ""),
                 paired: data['org.bluez.Device1']?.Paired.data ?? false,
                 bonded: data['org.bluez.Device1']?.Bonded.data ?? false,
                 trusted: data['org.bluez.Device1']?.Trusted.data ?? false,
@@ -135,6 +138,15 @@ Singleton {
         onTriggered: {
             initialBluetoothPoweredStatusProcess.running = true;
             getDevicesProcess.running = true
+        }
+    } 
+
+    Timer {
+        interval: 5000
+        repeat: false
+        running: root.powered
+        onTriggered: {
+            root.refreshDevices()
         }
     } 
 
@@ -270,6 +282,7 @@ Singleton {
         property string name: ""
         property string address: ""
         property string type: ""
+        property string icon: ""
         property bool paired: false
         property bool bonded: false
         property bool trusted: false
