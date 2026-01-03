@@ -68,6 +68,7 @@ Item {
           mainPopup: root.mainPopup
         }
         BluetoothWidget {
+          mainPopup: root.mainPopup
         }
         BatteryWidget{
           mainPopup: root.mainPopup
