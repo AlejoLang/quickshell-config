@@ -20,6 +20,13 @@ const getIconForStrength = (strength) => {
     return 'signal_wifi_4_bar'; // Default to the strongest signal icon
 };
 
+const getIconForEthernet = (status) => {
+    if (status == 100 || status == 70) {
+        return 'router';
+    }
+    return 'router_off';
+};
+
 const getOffIcon = () => {
     return 'signal_wifi_off';
 };
