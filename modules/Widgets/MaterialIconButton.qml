@@ -6,9 +6,7 @@ Button {
   id: root
   property string buttonIcon
   property color backgroundColor: "#32ACAC"
-  property color textColor: "#EFEFEF"
-
-  bottomPadding: 0
+  property color textColor: "#252525"
 
   enum Size {
     XS,
@@ -20,7 +18,7 @@ Button {
 
   property int size
   property real buttonSize: size == MaterialToggleButton.Size.XS ? 26 : MaterialToggleButton.Size.S ? 34 : MaterialToggleButton.Size.M ? 50 : MaterialToggleButton.Size.L ? 90 : MaterialToggleButton.Size.XL ? 130 : 10
-  property real iconSize: size == MaterialToggleButton.Size.XS ? 18 : MaterialToggleButton.Size.S ? 18 : MaterialToggleButton.Size.M ? 18 : MaterialToggleButton.Size.L ? 26 : MaterialToggleButton.Size.XL ? 34 : 5
+  property real iconSize: size == MaterialToggleButton.Size.XS ? 14 : MaterialToggleButton.Size.S ? 18 : MaterialToggleButton.Size.M ? 18 : MaterialToggleButton.Size.L ? 26 : MaterialToggleButton.Size.XL ? 34 : 5
   property real buttonRadiusActive: size == MaterialToggleButton.Size.XS ? 6 : MaterialToggleButton.Size.S ? 6 : MaterialToggleButton.Size.M ? 10 : MaterialToggleButton.Size.L ? 22 : MaterialToggleButton.Size.XL ? 22 : 2
 
 
@@ -57,6 +55,9 @@ Button {
     font.family: "Material Symbols Rounded"
     font.pixelSize: root.iconSize
     anchors.horizontalCenter: root.horizontalCenter
+    anchors.verticalCenter: root.verticalCenter
+    verticalAlignment: Qt.AlignVCenter
+    horizontalAlignment: Qt.AlignHCenter
     color: root.textColor
     Behavior on color {
       PropertyAnimation {

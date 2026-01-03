@@ -8,9 +8,10 @@ Button {
   property bool autoToggle: true
   property color backgroundActiveColor: "#32ACAC"
   property color backgroundInactiveColor: "#575757"
-  property color textActiveColor: "#EFEFEF"
-  property color textInactiveColor: "#333333"
+  property color textActiveColor: "#333333"
+  property color textInactiveColor: "#EFEFEF"
   property string buttonIcon
+  property bool useMaterialIcons: false
 
   enum Size {
     XS,
@@ -25,7 +26,7 @@ Button {
   property real iconSize: size == MaterialToggleButton.Size.XS ? 14 : MaterialToggleButton.Size.S ? 18 : MaterialToggleButton.Size.M ? 18 : MaterialToggleButton.Size.L ? 26 : MaterialToggleButton.Size.XL ? 34 : 5
   property real buttonRadiusActive: size == MaterialToggleButton.Size.XS ? 6 : MaterialToggleButton.Size.S ? 6 : MaterialToggleButton.Size.M ? 10 : MaterialToggleButton.Size.L ? 22 : MaterialToggleButton.Size.XL ? 22 : 2
 
-  width: buttonSize
+  width: buttonSize 
   height: buttonSize
 
   background: Rectangle {
@@ -55,9 +56,13 @@ Button {
   contentItem: Text {
     id: buttonText
     text: root.buttonIcon
-    horizontalAlignment: Text.AlignHCenter
-    verticalAlignment: Text.AlignVCenter
+    anchors.horizontalCenter: root.horizontalCenter
+    anchors.verticalCenter: root.verticalCenter
+    horizontalAlignment: Qt.AlignHCenter
+    verticalAlignment: Qt.AlignVCenter
     color: root.statusPressed ? root.textActiveColor : root.textInactiveColor
+    font.family: root.useMaterialIcons ? "Material Symbols Rounded" : ""
+    font.pixelSize: root.iconSize
     Behavior on color {
       PropertyAnimation {
         target: buttonText
