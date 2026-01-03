@@ -38,15 +38,15 @@ Item {
         Layout.fillWidth: true
         clip: true
       }
-      MaterialIconButton{
+      Row {
+        MaterialIconButton{
         id: openListButton
         buttonIcon: root.expanded ? "arrow_drop_up" : "arrow_drop_down"
-        Layout.fillHeight: true
-        Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
         onClicked: {
           root.expanded = !root.expanded
         }
       } 
+      }
     }
     RowLayout {
       width: parent.width
