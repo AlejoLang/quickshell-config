@@ -129,7 +129,6 @@ Item {
               Layout.fillWidth: true
             }
             MaterialIconButton {
-              size: MaterialIconButton.Size.XS
               buttonIcon: parent.modelData.connected ? "link_off" : "link"
               onClicked: {
                 if(parent.modelData.connected) {

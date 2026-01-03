@@ -32,8 +32,6 @@ Item {
       MaterialToggleButton {
         required property var modelData
         autoToggle: false
-        textActiveColor: "#efefef"
-        textInactiveColor: "#010101"
         buttonIcon: modelData.id
         statusPressed: Hyprland.focusedMonitor?.activeWorkspace === modelData
 
