@@ -50,6 +50,7 @@ Item {
         spacing: 20
         MultimediaWidget {
           Layout.alignment: Qt.AlignCenter
+          mainPopup: root.mainPopup
         }
       }
       RowLayout {

@@ -1,9 +1,11 @@
 pragma ComponentBehavior: Bound
 import QtQuick
 import qs.services
+import qs.modules.Bar
 
 Item {
   id: root
+  property Popup mainPopup
   implicitWidth: multimediaRow.width
   implicitHeight: multimediaRow.height
   Row {
@@ -22,5 +24,19 @@ Item {
       
       anchors.verticalCenter: parent.verticalCenter
     }
+  }
+  MouseArea {
+    anchors.fill: parent
+    onClicked: {
+      if(root.mainPopup.content == multimediaPopup) {
+        root.mainPopup.close()
+        return;
+      }
+      root.mainPopup.setContent(multimediaPopup, root);
+    }
+  }
+  MultimediaPopup {
+    id: multimediaPopup
+    visible: false
   }
 }
