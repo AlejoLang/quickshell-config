@@ -59,41 +59,46 @@ Item {
 
       RowLayout {
         width: parent.width
-        height: wifiSwitch.height
-        
+        height: wifiSwitch.height 
         Text {
           text: "Wifi"
           font.pixelSize: 18
           Layout.fillWidth: true
-          Layout.alignment: Qt.AlignVCenter
-          Layout.bottomMargin: 4
+          Layout.fillHeight: true
+          
         }
-        MaterialIconButton {
-          id: refreshButton
-          buttonIcon: "refresh"
-          backgroundColor: "#aaaaaa"
+        Row {
+          Layout.fillHeight: true 
           Layout.alignment: Qt.AlignVCenter
-          onClicked: {
-            NetworkManager.update()
-            rotateUpdateAnim.running = true
-          } 
-          PropertyAnimation {
-            id: rotateUpdateAnim
-            target: refreshButton.contentItem
-            property: "rotation"
-            from: 0
-            to: 360
-            loops: 3
-            duration: 1000
-            running: false
+          spacing: 5
+          MaterialIconButton {
+            id: refreshButton
+            buttonIcon: "refresh"
+            backgroundColor: "#aaaaaa"
+            anchors.verticalCenter: parent.verticalCenter
+            onClicked: {
+              NetworkManager.update()
+              rotateUpdateAnim.running = true
+            } 
+            PropertyAnimation {
+              id: rotateUpdateAnim
+              target: refreshButton.contentItem
+              property: "rotation"
+              from: 0
+              to: 360
+              loops: 3
+              duration: 1000
+              running: false
+            }
+             
           }
-        }
-        MaterialSwitch {
-          id: wifiSwitch
-          Layout.alignment: Qt.AlignVCenter
-          checked: NetworkManager.wifiActive
-          onCheckedChanged: {
-            NetworkManager.switchWifiPower()
+          MaterialSwitch {
+            id: wifiSwitch
+            checked: NetworkManager.wifiActive
+            onCheckedChanged: {
+              NetworkManager.switchWifiPower()
+            }
+             
           }
         }
       }
@@ -111,6 +116,7 @@ Item {
         Repeater {
           model: NetworkManager?.wifiNetworksList
           RowLayout {
+            id: wifiItem
             required property NetworkManager.WifiNetwork modelData
             width: parent.width
             Text {
@@ -128,13 +134,15 @@ Item {
             Item {
               Layout.fillWidth: true
             }
-            MaterialIconButton {
-              buttonIcon: parent.modelData.connected ? "link_off" : "link"
-              onClicked: {
-                if(parent.modelData.connected) {
-                  NetworkManager.disconnectFormNetwork(parent.modelData)
-                } else {
-                  NetworkManager.connectToNetwork(parent.modelData)
+            Row {
+              MaterialIconButton {
+                buttonIcon: wifiItem.modelData.connected ? "link_off" : "link"
+                onClicked: {
+                  if(wifiItem.modelData.connected) {
+                    NetworkManager.disconnectFormNetwork(wifiItem.modelData)
+                  } else {
+                    NetworkManager.connectToNetwork(wifiItem.modelData)
+                  }
                 }
               }
             }

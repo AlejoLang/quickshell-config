@@ -75,7 +75,7 @@ Item {
                   Bluetooth.trustDevice(bluetoothItem.modelData)
                 }
               }
-            }
+            } 
             MaterialIconButton {
               visible: bluetoothItem.modelData.paired
               buttonIcon: "delete"

@@ -54,7 +54,7 @@ Item {
       id: trackTitle
       width: parent.width - 20
       text: Media.currentPlayer.trackTitle || "Unknown Title"
-      horizontalAlignment: text.length * font.pixelSize > width ? Qt.AlignLeft : Qt.AlignHCenter
+      horizontalAlignment: text.length * (font.pixelSize / 2) > width ? Qt.AlignLeft : Qt.AlignHCenter
       anchors.horizontalCenter: parent.horizontalCenter
       topPadding: 20
       font.pixelSize: 30
@@ -65,7 +65,7 @@ Item {
       id: trackArtist
       width: parent.width - 20
       text: Media.currentPlayer.trackArtist || "Unknown Artist"
-      horizontalAlignment: text.length * font.pixelSize > width ? Qt.AlignLeft : Qt.AlignHCenter
+      horizontalAlignment: text.length * (font.pixelSize / 2) > width ? Qt.AlignLeft : Qt.AlignHCenter
       anchors.horizontalCenter: parent.horizontalCenter
       topPadding: 5
       font.pixelSize: 18
