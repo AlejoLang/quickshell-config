@@ -1,6 +1,7 @@
 pragma ComponentBehavior: Bound
 import QtQuick
 import QtQuick.Layouts
+import Quickshell
 import "components/Workspaces"
 import "components/CurrentWindow"
 import "components/DateTime"
@@ -9,10 +10,12 @@ import "components/AudioWidget"
 import "components/MultimediaWidget"
 import "components/NetworkWidget"
 import "components/BluetoothWidget"
+import "components/SystemTrayWidget"
 
 Item {
   id: root
   property Popup mainPopup
+  property PanelWindow window
 
   implicitHeight: 45
   Rectangle {
@@ -25,12 +28,11 @@ Item {
     RowLayout {
       id: barLayout
       anchors.fill: parent
-      anchors.verticalCenter: parent.verticalCenter
       Row {
         id: leftBarModule
         Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
-        Layout.maximumWidth: parent.width / 3
-        Layout.minimumWidth: parent.width / 3
+        Layout.preferredWidth: parent.width / 3
+        Layout.fillHeight: true
         spacing: 20
         Workspaces {
           id: workspaces 
@@ -46,7 +48,8 @@ Item {
       RowLayout {
         id: centerBarModule
         Layout.alignment: Qt.AlignCenter
-        Layout.fillWidth: true
+        Layout.preferredWidth: parent.width / 3
+        Layout.fillHeight: true
         spacing: 20
         MultimediaWidget {
           Layout.alignment: Qt.AlignCenter
@@ -56,11 +59,15 @@ Item {
       RowLayout {
         id: rightBarModule
         Layout.alignment: Qt.AlignVCenter | Qt.AlignRight
-        Layout.maximumWidth: parent.width / 3
-        Layout.minimumWidth: parent.width / 3
+        Layout.preferredWidth: parent.width / 3
+        Layout.fillHeight: true
         spacing: 20
         Item {
           Layout.fillWidth:true
+        }
+        SystemTrayWidget {
+          Layout.fillHeight: true
+          window: root.window
         }
         AudioWidget {
           mainPopup: root.mainPopup

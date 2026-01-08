@@ -76,6 +76,7 @@ Variants {
             Bar {
                 id: bar
                 mainPopup: popup
+                window: drawerWindow
                 anchors.left: parent.left
                 anchors.right: parent.right
                 anchors.top: parent.top
