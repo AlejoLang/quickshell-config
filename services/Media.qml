@@ -73,7 +73,7 @@ Singleton {
         running: false
         command: ["dbus-send", 
                     "--print-reply",
-                    "--dest=" + player.dbusName, 
+                    "--dest=" + player?.dbusName, 
                     "/org/mpris/MediaPlayer2", 
                     "org.mpris.MediaPlayer2.Player.SetPosition", 
                     "objpath:/org/mpris/MediaPlayer2/TrackList/0",

@@ -31,12 +31,12 @@ Item {
           Layout.fillWidth: true
           Layout.alignment: Qt.AlignVCenter
           Text {
-            text: NetworkManager?.ethernet?.status != 20 ? NetworkManager?.ethernet?.name : "Not connected"
+            text: NetworkManager?.ethernet?.status != 20 ? (NetworkManager?.ethernet?.name ?? "Undefined") : "Not connected"
             clip: true
             font.pixelSize: NetworkManager?.ethernet?.status != 20 ? 14 : 20
           }
           Text {
-            text: NetworkManager?.ethernet?.status != 70 && NetworkManager?.ethernet?.status != 20 ? NetworkManager?.ethernet?.ipv4 : "Assigning IP..."
+            text: NetworkManager?.ethernet?.status != 70 && NetworkManager?.ethernet?.status != 20 ? (NetworkManager?.ethernet?.ipv4 ?? "Undefined") : "Assigning IP..."
             visible: NetworkManager?.ethernet?.status != 20
             clip: true
             font.pixelSize: 14

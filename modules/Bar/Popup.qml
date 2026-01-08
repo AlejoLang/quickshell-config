@@ -27,7 +27,7 @@ PopupWindow {
     PropertyAnimation {
       target: root
       property: "targetY"
-      from: -openAnimation.content.height
+      from: -openAnimation?.content?.height
       to: 10
       duration: 150
     }
@@ -83,13 +83,13 @@ PopupWindow {
     PropertyAnimation {
       target: root
       property: "targetHeight"
-      to: changeItemAnimation.newItem.height + 30
+      to: changeItemAnimation?.newItem?.height + 30
       duration: 150
     }
     PropertyAnimation {
       target: root
       property: "targetWidth"
-      to: changeItemAnimation.newItem.width + 20
+      to: changeItemAnimation?.newItem?.width + 20
       duration: 150
     }
     PropertyAnimation {
@@ -112,10 +112,10 @@ PopupWindow {
       root.content.visible = true
       wrapperRectOpAnim.enabled = true
       wrapperRect.opacity = 1
-      root.targetHeight = Qt.binding(() => root.content.height + 30)
-      root.targetWidth = Qt.binding(() => root.content.width + 20)
-      root.implicitHeight = Qt.binding(() => root.content.height + 30)
-      root.implicitWidth = Qt.binding(() => root.content.width + 20)
+      root.targetHeight = Qt.binding(() => (root?.content?.height ?? 1) + 30)
+      root.targetWidth = Qt.binding(() => (root?.content?.width ?? 1) + 20)
+      root.implicitHeight = Qt.binding(() => (root?.content?.height ?? 1) + 30)
+      root.implicitWidth = Qt.binding(() => (root?.content?.width ?? 1) + 20)
     }
   }
 

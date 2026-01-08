@@ -14,7 +14,6 @@ Singleton {
 
     function processGetDevices(json: string) {
         if(!json || json.trim() === "") {
-            console.warn("No Bluetooth devices found or empty JSON response on busctl.");
             return;
         }
         const res = JSON.parse(json);
@@ -30,15 +29,15 @@ Singleton {
                 continue;
             }
             const device = deviceComponent.createObject(root, {
-                name: data['org.bluez.Device1']?.Name.data ?? "",
-                address: data['org.bluez.Device1']?.Address.data ?? "",
-                type: data['org.bluez.Device1']?.Icon.data ?? "",
-                icon: BluetoothIcons.getBluetoothIconForType(data['org.bluez.Device1']?.Icon.data ?? ""),
-                paired: data['org.bluez.Device1']?.Paired.data ?? false,
-                bonded: data['org.bluez.Device1']?.Bonded.data ?? false,
-                trusted: data['org.bluez.Device1']?.Trusted.data ?? false,
-                connected: data['org.bluez.Device1']?.Connected.data ?? false,
-                battery: data['org.bluez.Battery1'] ? (data['org.bluez.Battery1']?.Percentage.data ?? -1) : -1
+                name: data['org.bluez.Device1']?.Name?.data ?? "",
+                address: data['org.bluez.Device1']?.Address?.data ?? "",
+                type: data['org.bluez.Device1']?.Icon?.data ?? "",
+                icon: BluetoothIcons.getBluetoothIconForType(data['org.bluez.Device1']?.Icon?.data ?? ""),
+                paired: data['org.bluez.Device1']?.Paired?.data ?? false,
+                bonded: data['org.bluez.Device1']?.Bonded?.data ?? false,
+                trusted: data['org.bluez.Device1']?.Trusted?.data ?? false,
+                connected: data['org.bluez.Device1']?.Connected?.data ?? false,
+                battery: data['org.bluez.Battery1'] ? (data['org.bluez.Battery1']?.Percentage?.data ?? -1) : -1
             });
             filteredDevices.push(device);
         }

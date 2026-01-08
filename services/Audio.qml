@@ -27,7 +27,6 @@ Singleton {
     function setNodeVolume(nodeId: int, volume: real) {
         let node = tracker.objects.find(n => n.id === nodeId);
         if(!node) {
-            console.warn("Node with ID", nodeId, "not found in tracker.");
             return;
         }
         node.audio.volume = Math.max(0, Math.min(1, volume));
@@ -36,7 +35,6 @@ Singleton {
     function toggleNodeMute(nodeId: int) {
         let node = tracker.objects.find(n => n.id === nodeId);
         if(!node) {
-            console.warn("Node with ID", nodeId, "not found in tracker.");
             return;
         }
         node.audio.muted = !node.audio.muted;
@@ -44,11 +42,11 @@ Singleton {
 
     function switchDefaultNode(nodeId: int) {
         if(switchDefaultNodeProcess.running) {
-            console.warn("Node switch process already running");
+            return;
         }
         let node = tracker.objects.find(n => n.id === nodeId);
         if(!node) {
-            console.warn("Node not found");
+            return;
         }
         switchDefaultNodeProcess.nodeId = nodeId; 
         switchDefaultNodeProcess.running = true;
@@ -69,14 +67,14 @@ Singleton {
     function getCurrentNodeIcon(nodeId: int): string {
         let node = tracker.objects.find(n => n.id === nodeId);
         if(!node) {
-            console.warn("Node not found");
+            return;
         }
-        if(nodeId == root.currentSink.id) {
+        if(nodeId == root?.currentSink?.id) {
             return root.getCurrentSinkIcon()
-        } else if (nodeId == root.currentSource.id) {
+        } else if (nodeId == root?.currentSource?.id) {
             return root.getCurrentSourceIcon()
         }
-        if(node.isSink) {
+        if(node?.isSink) {
             return 'speaker';
         } else {
             return 'mic';
@@ -86,7 +84,7 @@ Singleton {
     function getNodeVolumeIcon(nodeId: int): string {
         let node = tracker.objects.find(n => n.id === nodeId);
         if(!node) {
-            console.warn("Node not found")
+            return;
         }
         const volume = node?.audio?.muted ? -1 : (node?.audio?.volume * 100 ?? -1)
         return AudioIcons.getVolumeIcon(volume, node?.isSink)

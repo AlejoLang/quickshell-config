@@ -16,7 +16,7 @@ Item {
     radius: 10
     Image {
       id: trackImage
-      source: Media.currentPlayer.trackArtUrl
+      source: Media?.currentPlayer?.trackArtUrl ?? ""
       anchors.fill: parent
       width: parent.width
       height: parent.height
@@ -53,7 +53,7 @@ Item {
     Text {
       id: trackTitle
       width: parent.width - 20
-      text: Media.currentPlayer.trackTitle || "Unknown Title"
+      text: Media?.currentPlayer?.trackTitle || "Unknown Title"
       horizontalAlignment: text.length * (font.pixelSize / 2) > width ? Qt.AlignLeft : Qt.AlignHCenter
       anchors.horizontalCenter: parent.horizontalCenter
       topPadding: 20
@@ -64,7 +64,7 @@ Item {
     Text {
       id: trackArtist
       width: parent.width - 20
-      text: Media.currentPlayer.trackArtist || "Unknown Artist"
+      text: Media?.currentPlayer?.trackArtist || "Unknown Artist"
       horizontalAlignment: text.length * (font.pixelSize / 2) > width ? Qt.AlignLeft : Qt.AlignHCenter
       anchors.horizontalCenter: parent.horizontalCenter
       topPadding: 5
@@ -85,7 +85,7 @@ Item {
       }
       MaterialIconButton {
         id: previousTrackButton
-        visible: Media.currentPlayer.canGoPrevious
+        visible: Media?.currentPlayer?.canGoPrevious ?? false
         buttonIcon: "skip_previous"
         onClicked: {
           Media.currentPlayer.previous()
@@ -93,15 +93,15 @@ Item {
       }
       MaterialIconButton {
         id: playPauseButton
-        visible: Media.currentPlayer.canPause && Media.currentPlayer.canPlay
-        buttonIcon: Media.currentPlayer.playbackState == MprisPlaybackState.Playing ? "pause" : "play_arrow"
+        visible: (Media?.currentPlayer?.canPause && Media?.currentPlayer?.canPlay) ?? false
+        buttonIcon: Media?.currentPlayer?.playbackState == MprisPlaybackState.Playing ? "pause" : "play_arrow"
         onClicked: {
           Media.currentPlayer.togglePlaying()
         }
       }
       MaterialIconButton {
         id: nextTrackButton
-        visible: Media.currentPlayer.canGoNext
+        visible: Media?.currentPlayer?.canGoNext ?? false
         buttonIcon: "skip_next"
         onClicked: {
           Media.currentPlayer.next()
@@ -120,18 +120,19 @@ Item {
       width: parent.width - 20
       height: 40
       anchors.horizontalCenter: parent.horizontalCenter
-      animating: Media.currentPlayer.playbackState == MprisPlaybackState.Playing
-      value: Media.currentPlayer.position / Media.currentPlayer.length
+      animating: Media?.currentPlayer?.playbackState == MprisPlaybackState.Playing
+      value: Media?.currentPlayer?.position / Media?.currentPlayer?.length
       live: false
       Timer {
-        running: Media.currentPlayer.playbackState == MprisPlaybackState.Playing && root.visible && !trackProgressionIndicator.pressed
+        running: Media?.currentPlayer?.playbackState == MprisPlaybackState.Playing && root.visible && !trackProgressionIndicator.pressed
         repeat: true
         interval: 100
         onTriggered: {
-          Media.currentPlayer.positionChanged()
+          Media?.currentPlayer?.positionChanged()
         }
       } 
       onPressedChanged: {
+        if(!Media?.currentPlayer) { return; }
         let seekL = Media.currentPlayer.length * trackProgressionIndicator.value
         if(!trackProgressionIndicator.pressed) {
           Media.currentPlayer.position = seekL
@@ -139,6 +140,7 @@ Item {
       }
 
       onValueChanged: {
+        if(!Media?.currentPlayer) { return; }
         let seekL = Media.currentPlayer.length * trackProgressionIndicator.value
         if(Math.abs(seekL - Media.currentPlayer.position) > 1000) {
           Media.setPlayerPosition(Media.currentPlayer, seekL);

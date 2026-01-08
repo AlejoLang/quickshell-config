@@ -14,7 +14,7 @@ Singleton {
         }
         if (display && display.name) {
             setBrightnessProcess.display = display;
-            setBrightnessProcess.set = `${Math.max(0, Math.min(1, value)) * 100}%`;
+            setBrightnessProcess.value = `${Math.max(0, Math.min(1, value)) * 100}%`;
             setBrightnessProcess.running = true;
             root.brightnessChanged();
             root.displays.find(d => d.name === display.name).currentBrightness = value * display.maxBrightness; 
@@ -62,8 +62,8 @@ Singleton {
         id: setBrightnessProcess
         running: false
         property DisplayComp display: null
-        property string set: "0"
-        command: ["brightnessctl", "-d", setBrightnessProcess.display.name, "set", setBrightnessProcess.set]
+        property string value: "0"
+        command: ["brightnessctl", "-d", setBrightnessProcess?.display?.name, "set", setBrightnessProcess?.value]
     }
 
     component DisplayComp: QtObject {

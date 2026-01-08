@@ -129,7 +129,7 @@ Singleton {
     }
 
     function getEthernetStatusIcon() {
-        return NetworkIcons.getIconForEthernet(root.ethernet.status)
+        return NetworkIcons.getIconForEthernet(root?.ethernet?.status)
     }
 
     Timer {

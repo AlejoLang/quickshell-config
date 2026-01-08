@@ -12,7 +12,7 @@ Item {
   property PwNode selectedNode
   property bool expanded: false
   width: 410
-  height: childrenRect.height
+  height: nodeCol.height
   
    Column {
     id: nodeCol
@@ -26,13 +26,13 @@ Item {
       width: parent.width
       Text {
         id: nodeIcon
-        text: Audio.getCurrentNodeIcon(root.selectedNode.id);
+        text: Audio.getCurrentNodeIcon(root?.selectedNode?.id ?? 0);
         font.family: "Material Symbols Rounded"
         font.pixelSize: 20
       }
       Text {
         id: nodeName
-        text: root.selectedNode.description
+        text: root?.selectedNode?.description ?? "No description"
         font.pixelSize: 20
         Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
         Layout.fillWidth: true
