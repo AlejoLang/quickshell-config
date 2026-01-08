@@ -39,12 +39,10 @@ Item {
           anchors.fill: parent
           acceptedButtons: Qt.MiddleButton | Qt.LeftButton | Qt.RightButton
           onClicked: (event) => {
-            console.log(event.button)
             if(event.button == Qt.LeftButton) {
               parent.modelData.activate()
             } else if(event.button == Qt.RightButton) {
               const pos = root.window.itemPosition(parent)
-              console.log(pos.x, pos.y)
               parent.modelData.display(root.window, pos.x, pos.y + 30)
             } else if (event.button == Qt.MiddleButton) {
               parent.modelData.secondaryActivate()

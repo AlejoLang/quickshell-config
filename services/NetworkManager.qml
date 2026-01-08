@@ -204,11 +204,6 @@ Singleton {
         command: ["nmcli", "con", "up", "id", networkName];
         stdinEnabled: true
         running: false
-        stdout: StdioCollector {
-            onStreamFinished: {
-                console.log(text)
-            }
-        }
     }
 
     Process {
@@ -216,11 +211,6 @@ Singleton {
         property string networkName: "";
         command: ["nmcli", "con", "down", "id", networkName];
         running: false
-        stdout: StdioCollector {
-            onStreamFinished: {
-                console.log(text)
-            }
-        }
     }
 
     component WifiNetwork: QtObject {

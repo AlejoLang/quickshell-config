@@ -135,7 +135,6 @@ Item {
         let seekL = Media.currentPlayer.length * trackProgressionIndicator.value
         if(!trackProgressionIndicator.pressed) {
           Media.currentPlayer.position = seekL
-          console.log(Media.currentPlayer.canSeek)
         }
       }
 
@@ -144,7 +143,6 @@ Item {
         if(Math.abs(seekL - Media.currentPlayer.position) > 1000) {
           Media.setPlayerPosition(Media.currentPlayer, seekL);
           Media.currentPlayer.position = seekL
-          console.log(Media.currentPlayer.canSeek)
         }
       }
     }
